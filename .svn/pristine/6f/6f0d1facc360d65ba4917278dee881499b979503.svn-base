@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>java小说爬虫</title>
+<script src="../../theme/jsStoreRoom/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+	<input type="text" id="url">
+	<button id="startWork">开始爬取</button>
+</body>
+<script>
+var BasePath = getBasePath();
+/**
+ * 获取获取网站的根目录
+ * @returns
+ */
+function getBasePath(){ 
+	var obj=window.location; 
+	var contextPath=obj.pathname.split("/")[1]; 
+	var basePath=obj.protocol+"//"+obj.host+"/"+contextPath; 
+	return basePath; 
+} 
+</script>
+<script>
+	$("#startWork").click(function(){
+		var url = $("#url").val();
+		if( url == ""){
+			alert("请输入url");
+			return false;
+		} 
+		$.post(''+BasePath+'/novelCrawler/startCrawlerWorkToDataBase.control',{url:url},function(data){
+			console.log(data);
+		});
+	});
+</script>
+</html>

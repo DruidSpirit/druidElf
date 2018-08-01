@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"    
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd 
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd 
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task.xsd">
+		
+		<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+			<!--配置securityManager  -->
+			<property name="securityManager" ref="securityManager"></property>
+			<!--如果不配置该属性，默认情况下会到根路径下的login.jsp （当访问需要认证的资源时） -->
+			<property name="loginUrl" value="/toLogin"/>
+			<!--配置认证成功后跳转到哪个URL，通常不设置，若不设置默认跳转到上一个URL  -->
+			<!-- <property name="successUrl" value="/otherPage"/> -->
+			<!--配置用户没有访问资源权限是跳转到URL  -->
+			<property name="unauthorizedUrl" value="/refuse"/>
+			<!--配置shiro的过滤器链  -->
+			<property name="filterChainDefinitions">
+				<value>
+					/toLogin=anon<!--可匿名访问  -->
+					/login=anon
+					/index=authc<!--需要认证  -->
+					/logout=logout
+					/**=anon
+				</value>
+			</property>
+		</bean>
+		
+		<!--配置securityManager-->
+		<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+			<property name="realm" ref="userRealm"/>
+		</bean> 
+		
+		<bean id="userRealm" class="com.druid.realm.UserRealm"></bean>
+
+</beans>

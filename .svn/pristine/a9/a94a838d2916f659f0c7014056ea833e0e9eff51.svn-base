@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[user]
+	email = 844748180@qq.com
+	name = druid
+[gui]
+	wmstate = normal
+	geometry = 841x483+556+246 189 218

@@ -1,0 +1,4 @@
+jdbc.driverClassName=com.mysql.cj.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost/druidelf?useUnicode=true&serverTimezone=GMT&characterEncoding=utf8&useSSL=true
+jdbc.username=root
+jdbc.password=root

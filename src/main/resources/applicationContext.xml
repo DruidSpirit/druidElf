@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"    
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd 
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd 
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task.xsd">
+		
+        <!-- 扫描组件 -->
+        <context:component-scan base-package="com.druid">
+        	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        </context:component-scan>
+		<!-- 扫描属性注入 -->
+        <context:annotation-config/>
+        
+        <context:property-placeholder location="classpath:jdbc.properties"/>
+        <!-- 配置数据源 -->
+        <bean id="dataSource"
+        		class="com.mchange.v2.c3p0.ComboPooledDataSource" 
+        		destroy-method="close">
+        	<property name="driverClass" value="${jdbc.driverClassName}"/>
+        	<property name="jdbcUrl" value="${jdbc.url}"/>
+        	<property name="user" value="${jdbc.username}"/>
+        	<property name="password" value="${jdbc.password}"/>
+        </bean>
+        
+        <!-- 配置会话工厂SqlSessionFactory与mabatis配置整合 -->
+        <bean id="sqlSessionFactory"
+        	class="org.mybatis.spring.SqlSessionFactoryBean">
+        	<!-- 加载mybatis的配置文件 -->
+        	<property name="configLocation" value="classpath:mybatis-config.xml"/>
+        	<!-- 注入数据源 -->
+        	<property name="dataSource" ref="dataSource"/>
+        	<!--指定mybatis.mapper文件的位置  -->
+        	<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        </bean>
+		<bean class="hellowSpring"/>
+        <!-- 管理mybatis配置文件下的包扫描 -->
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        	<!--扫描所有的dao接口加入到容器中  -->
+        	<property name="basePackage" value="com.druid.dao"/>
+        	<!-- 配置使用会话工厂 -->
+        	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        </bean>
+        <!--===================================================  -->
+        <!--配置一个可以执行批量的sqlsession  -->
+        <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        	<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+       		<constructor-arg name="executorType" value="BATCH"></constructor-arg>
+        </bean>
+        <!--===================================================  -->
+        
+        <!-- 配置事务管理 -->
+        <bean id="txManager"
+        	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        	<property name="dataSource" ref="dataSource"/>
+        </bean>
+        
+        
+         <!--开启基于注解的事物，使用xml配置形式的事物  -->
+        <aop:config>
+        	<!--切入点表达式  -->
+        	<aop:pointcut expression="execution(* com.druid.service.*.*(..))" id="txPoint"/>
+        	<aop:advisor advice-ref="taAdvice" pointcut-ref="txPoint" />
+        </aop:config>
+        
+        <!--配置事物增强，事物如何切入  -->
+        <tx:advice id="taAdvice" transaction-manager="txManager">
+        	<tx:attributes>
+        		<!--所有方法都是事物方法  -->
+        		<tx:method name="*"/>
+        		<!--以get开始的所有方法  -->
+        		<tx:method name="get*" read-only="true"/>
+        	</tx:attributes>
+        </tx:advice>
+        <!-- 配置注解使用事务 -->
+        <tx:annotation-driven transaction-manager="txManager"/>
+
+             
+        <!-- 配置切面 -->
+        <aop:aspectj-autoproxy/>
+        <!-- 任务扫描注解  -->
+  	    <task:annotation-driven/>
+</beans>

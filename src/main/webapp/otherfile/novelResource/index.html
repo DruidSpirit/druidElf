@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>java小说爬虫</title>
+<script src="../../theme/jsStoreRoom/jquery-3.2.1.min.js"></script>
+<script src="../../theme/layui/layui.js"></script>
+<link rel="stylesheet" href="../../theme/layui/css/layui.css" />
+<style>
+	#content{
+		width:70%;
+		margin:0 auto
+	}
+</style>
+</head>
+<body>
+<div id="content">
+	<form class="layui-form">
+		<p>欢迎来到爬虫!</p>
+		
+		 爬取链接:<input type="text" id="url" width="100%;">&nbsp<a id="changeUrl" href="javascript:void(0)"></a><br>		
+		爬取页数:<input type="text" id="page" value="1"><br>
+		爬取进度:<b id="rating"></b>页
+	<div class="layui-form-item">
+	    <label class="layui-form-label">小说类型</label>
+	    <div class="layui-input-block novelTypes">
+	      <input type="radio" lay-filter="novelType" name="type" value="1" title="武侠小说" checked>
+	      <input type="radio" lay-filter="novelType" name="type" value="2" title="玄幻小说" >
+	      <input type="radio" lay-filter="novelType" name="type" value="3" title="都市言情" >
+	      <input type="radio" lay-filter="novelType" name="type" value="4" title="恐怖灵异" >
+	      <input type="radio" lay-filter="novelType" name="type" value="5" title="现代文学" >
+	      <input type="radio" lay-filter="novelType" name="type" value="6" title="侦探推理" >
+	      <input type="radio" lay-filter="novelType" name="type" value="7" title="科幻小说" >
+	      <input type="radio" lay-filter="novelType" name="type" value="8" title="穿越架空" >
+	      <input type="radio" lay-filter="novelType" name="type" value="9" title="古典名著" >
+	      <input type="radio" lay-filter="novelType" name="type" value="10" title="历史军事" >
+	      <input type="radio" lay-filter="novelType" name="type" value="11" title="网游小说" >
+	      <input type="radio" lay-filter="novelType" name="type" value="12" title="其他" >
+	      <input id="novelType" type="hidden" value="1"> 
+	    </div>
+  	</div>
+		<button type="button" class="layui-btn layui-btn-warm" id="startWork">开始爬取</button>
+	</form>	
+	<div>
+		<div>
+			<h1>总爬取量:<span id="allCount"></span>条。。。本次抓取:<span id=getCount></span>条</h1>
+			<p id="newLink"><b>最近新下载链接</b>:<a href="javascript:void(0)"></a></p>
+		</div>
+		<div>
+			<b>小说名称：</b><span id="name"></span><br/>
+			<img style="float: left;" id="pic" alt="" src="">
+			<div style="width: 500px;">
+				<b>简介:</b><span id="intro"></span><br/>
+			</div>>
+			<b>作者:</b><span id="author"></span><br/>
+		</div>
+	</div>
+</div>
+</body>
+<script>
+
+/**
+ * 定义全局参数
+ */
+ var BasePath = getBasePath();
+ var url;
+ var pageAll = 0;
+ var page = 0;
+ var sum = 0;
+ var index;
+ var id;
+/**
+ * 获取获取网站的根目录
+ * @returns
+ */
+function getBasePath(){ 
+	var obj=window.location; 
+	var contextPath=obj.pathname.split("/")[1]; 
+	var basePath=obj.protocol+"//"+obj.host+"/"+contextPath; 
+	return basePath; 
+} 
+
+layui.use(['layer','form'], function() {
+	var layer = layui.layer;
+	var form = layui.form;
+	form.render(); //更新全部
+
+	form.on('radio(novelType)', function(data) {
+		$("#novelType").val(data.value);
+	});
+	
+	$("#startWork").click(function(){
+		
+		/* var index = layer.load(2);
+		var id=layer.msg('爬取中', {
+            icon: 16,
+            time:false //取消自动关闭
+		}); */
+		//setTimeout(function(){statCravlWorking(index,id);},1000);
+		statCravlWorking();
+	});
+
+	function statCravlWorking(){
+		
+		 url = $("#url").val();
+		 pageAll = $("#page").val();
+		var novelType = $("#novelType").val();
+		if( url == ""){
+			layer.msg("请输入url");
+			return false;
+		} 
+		if(page == ""){
+			page = 1;
+		}
+		
+		toCrawl(url,novelType);
+		
+		/* for (var i = 0; i < page; i++) {
+			var getResult = toCrawl(url,novelType);
+			url = getResult.message.otherMessage;
+			console.log(getResult);
+			if(getResult.message.status){
+				sum += getResult.novelList.length;
+			}			
+			var rating = (i+1) + "/" + page;
+			$("#rating").text(rating);
+		}  
+		
+		   layer.close(index);
+		   layer.close(id);
+		   $("#getCount").text(sum);
+		   
+		   if(sum!=0){
+			   upadateStatus();
+		   }else{
+			   $("#url").val(url);
+				$("#changeUrl").text($("#url").val())
+				   .attr("href",$("#url").val());
+		   }
+		   
+		  var msg = "抓取完成，本次共抓取"+sum+"条"; 
+		layer.msg(msg); */
+	}
+<!--上次爬取的最后一条数据  -->
+	$(function(){
+		upadateStatus();
+	});
+	//跟新最近一次爬取数据
+	function upadateStatus(){
+		
+		$.post(''+BasePath+'/novelCrawler/getCrawlStatus.control',function(data){
+			console.log(data);
+			$("#newLink a").text(data.list[0].crawl_start_link)
+						   .attr("href",data.list[0].crawl_start_link);
+			$("#name").text(data.list[0].name);
+			$("#pic").attr("src",data.list[0].link_src);
+			$("#intro").text(data.list[0].intro);
+			$("#author").text(data.list[0].author);
+			$("#allCount").text(data.count.count);
+			$(".novelTypes input[value='"+data.list[0].type+"']").click();
+			$("#novelType").val(data.list[0].type);
+			form.render();
+			getNextPage(data.list[0].crawl_start_link);
+		});
+	};
+	//向后台发出爬取数据请求
+	function toCrawl(url,novelType){
+		if(page<=pageAll){
+			index = layer.load(2);
+			id=layer.msg('爬取中,爬取进度'+page+'/'+pageAll+',已爬取'+sum+'条', {
+	            icon: 16,
+	            time:false //取消自动关闭
+			});
+			$("#rating").text(page+"/"+pageAll);
+		}
+		//$.ajaxSettings.async = false;		
+		$.post(''+BasePath+'/novelCrawler/startCrawlerWorkToDataBase.control',{url:url,novelType:novelType},function(data){
+			page ++;
+			if(data.message.status){
+				sum += data.novelList.length;
+			}
+			
+			url = data.message.otherMessage;
+					
+			if(page<=pageAll){				
+				toCrawl(url,novelType);
+			}
+			if(page>pageAll){
+				$("#getCount").text(sum);
+				layer.close(index);
+				layer.close(id);
+				layer.msg("抓取完成，本次共抓取"+sum+"条")
+				 
+				if(sum>0){
+					   upadateStatus();
+				 }else{
+					   $("#url").val(url);
+						$("#changeUrl").text($("#url").val())
+						   .attr("href",$("#url").val());
+				}
+				
+				 pageAll = 0;
+				  page = 0;
+				  sum = 0;
+			}
+		});
+
+	}
+	
+	//得到下一条分页链接链接、
+	function getNextPage(previousUrl){
+		
+		$.post(''+BasePath+'/novelCrawler/startCrawlerWorkPage.control',{previousUrl:previousUrl},function(data){
+			$("#url").val(data.nextPageUrl);
+			$("#changeUrl").text($("#url").val())
+			   .attr("href",$("#url").val());
+		});
+	}
+	
+});
+</script>
+</html>

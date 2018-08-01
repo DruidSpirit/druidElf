@@ -1,0 +1,163 @@
+package com.druid.entity;
+
+public class NovelResource {
+    private Integer id;
+
+    private Integer type;
+
+    private String linkTxt;
+
+    private String name;
+
+    private String intro;
+
+    private String linkResourceAdress;
+
+    private Long addTime;
+
+    private Long popular;
+
+    private String linkZip;
+
+    private String linkOther;
+
+    private Integer status;
+
+    private String siteAddress;
+
+    private String linkSrc;
+
+    private Double size;
+
+    private Long turnOverTime;
+
+    private String author;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getLinkTxt() {
+        return linkTxt;
+    }
+
+    public void setLinkTxt(String linkTxt) {
+        this.linkTxt = linkTxt == null ? null : linkTxt.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro == null ? null : intro.trim();
+    }
+
+    public String getLinkResourceAdress() {
+        return linkResourceAdress;
+    }
+
+    public void setLinkResourceAdress(String linkResourceAdress) {
+        this.linkResourceAdress = linkResourceAdress == null ? null : linkResourceAdress.trim();
+    }
+
+    public Long getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Long addTime) {
+        this.addTime = addTime;
+    }
+
+    public Long getPopular() {
+        return popular;
+    }
+
+    public void setPopular(Long popular) {
+        this.popular = popular;
+    }
+
+    public String getLinkZip() {
+        return linkZip;
+    }
+
+    public void setLinkZip(String linkZip) {
+        this.linkZip = linkZip == null ? null : linkZip.trim();
+    }
+
+    public String getLinkOther() {
+        return linkOther;
+    }
+
+    public void setLinkOther(String linkOther) {
+        this.linkOther = linkOther == null ? null : linkOther.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getSiteAddress() {
+        return siteAddress;
+    }
+
+    public void setSiteAddress(String siteAddress) {
+        this.siteAddress = siteAddress == null ? null : siteAddress.trim();
+    }
+
+    public String getLinkSrc() {
+        return linkSrc;
+    }
+
+    public void setLinkSrc(String linkSrc) {
+        this.linkSrc = linkSrc == null ? null : linkSrc.trim();
+    }
+
+    public Double getSize() {
+        return size;
+    }
+
+    public void setSize(Double size) {
+        this.size = size;
+    }
+
+    public Long getTurnOverTime() {
+        return turnOverTime;
+    }
+
+    public void setTurnOverTime(Long turnOverTime) {
+        this.turnOverTime = turnOverTime;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author == null ? null : author.trim();
+    }
+}

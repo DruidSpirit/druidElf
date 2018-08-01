@@ -30,7 +30,7 @@ public class LoginAboutControl  implements Serializable{
 	}
 	
 	/**
-	 * 登入
+	 * 开始登入
 	 * @return
 	 */
 	@RequestMapping(value="/login")

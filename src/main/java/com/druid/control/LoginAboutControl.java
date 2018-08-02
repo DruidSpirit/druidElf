@@ -38,7 +38,7 @@ public class LoginAboutControl  implements Serializable{
 		Subject subject = SecurityUtils.getSubject();
 		 UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 		 subject.login(token);
-		System.out.println("提交登入!");
+		System.out.println("通过权限验证");
 		return "index";
 		
 	}

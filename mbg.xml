@@ -12,9 +12,9 @@
 	</commentGenerator>
   <!--配置数据库连接信息  -->
     <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-        connectionURL="jdbc:mysql://localhost/druidelf?useUnicode=true&amp;serverTimezone=GMT&amp;characterEncoding=utf8&amp;useSSL=false"
-        userId="druidelf"
-        password="druid">
+        connectionURL="jdbc:mysql://localhost/druidelf?useUnicode=true&amp;serverTimezone=GMT&amp;characterEncoding=utf8&amp;useSSL=true"
+        userId="root"
+        password="root">
     </jdbcConnection>
 
     <javaTypeResolver >

@@ -46,7 +46,7 @@
         </bean>
 		<bean class="hellowSpring"/>
         <!-- 管理mybatis配置文件下的包扫描 -->
-        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
         	<!--扫描所有的dao接口加入到容器中  -->
         	<property name="basePackage" value="com.druid.dao"/>
         	<!-- 配置使用会话工厂 -->

@@ -37,7 +37,7 @@ public class RequestWeChatService {
 	
 	
 	/**
-	 * 程序中访问http数据接口
+	 * 程序中访问http数据接口（获取微信返回的access_token）
 	 */
 	public static String getURLContent(String urlStr) {
 		/** 网络的url地址 */

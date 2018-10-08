@@ -10,7 +10,7 @@ import com.druid.entity.DruidUser;
 import com.druid.service.DruidUserService;
 
 @Service
-public class DruidUserServiceImpl implements DruidUserService{
+public class DruidUserServiceImpl extends BaseService<DruidUser> implements DruidUserService{
 	@Autowired
 	private DruidUserMapper druidUserMapper;
 

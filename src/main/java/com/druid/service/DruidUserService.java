@@ -4,6 +4,6 @@ import java.util.List;
 
 import com.druid.entity.DruidUser;
 
-public interface DruidUserService {
+public interface DruidUserService extends IService<DruidUser>{
 	List<DruidUser> selectAll();
 }

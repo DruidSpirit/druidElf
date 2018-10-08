@@ -25,12 +25,18 @@ public class DruidUser {
      */
     private String password;
 
+    private String salt;
+   /**
+     * 加密盐值
+     */
+
     public DruidUser() {
     }
 
-    public DruidUser(String username, String password) {
+    public DruidUser(String username, String password, String salt) {
         this.username = username;
         this.password = password;
+        this.salt = salt;
     }
 
     public Integer getId() {
@@ -55,5 +61,13 @@ public class DruidUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

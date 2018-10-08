@@ -34,7 +34,7 @@ public class NovelCrawlerControl {
 	private NovelResourceService novelResourceService;
 	@Autowired
 	private CommonService commonService;
-	
+
 	private Message message = new Message();
 	private Map map = new HashMap<>();
 	/**
@@ -45,7 +45,7 @@ public class NovelCrawlerControl {
 	 */
 	@RequestMapping(value="/novelCrawler/getSourceList.control",method=RequestMethod.GET)
 	public String getSourceList(HttpServletRequest request,
-			@RequestParam(value="fenye",required=false) Integer page){
+								@RequestParam(value="fenye",required=false) Integer page){
 		List<NovelResource> list = new ArrayList<NovelResource>();
 		//PageHelper.startPage(1, 10);
 		list=novelResourceService.selectByNovelResource(null);
@@ -53,7 +53,7 @@ public class NovelCrawlerControl {
 		//request.setAttribute("pageInfo", p);
 		return "service";
 	}
-	
+
 	/**
 	 * 开始爬取资源(将爬取的资源放到数据库中)
 	 * @param request
@@ -64,32 +64,34 @@ public class NovelCrawlerControl {
 	@ResponseBody
 	@RequestMapping(value="/novelCrawler/startCrawlerWorkToDataBase.control")
 	public Map startCrawlerWorkToDataBase(String url,Integer novelType){
-		
+
 		if(url==null||novelType==null){
 			message.setStatus(false);
 			message.setMessage("链接或者类型为空");
 			map.put("message", message);
 			return map;
-		};	
-		
+		};
+
 		CommonParam commonParam = new CommonParam();
 		commonParam.setLink(url);
-		
+
 		commonParam.setType(novelType);
 		commonParam.setSiteAddress(UrlAboutNovelEnums.urlSite0.getUrl());
 		List<NovelResource> tmp = novelResourceService.getResourceToDataBase(commonParam);
 		List<NovelResource> resultList = new ArrayList<NovelResource>();
-		
+
 		for (int j = 0; j < tmp.size(); j++) {
 			NovelResource novelResource = tmp.get(j);
+
+//			NovelResource novelTmp = NovelResource.builder().build();
 			NovelResource novelTmp = new NovelResource();
 			if(novelResource.getLinkTxt()==null) continue;
 			novelTmp.setLinkTxt(novelResource.getLinkTxt());
-			
+
 			List<NovelResource> tmp2 = novelResourceService.selectByNovelResource(novelTmp);
 			if(tmp2.size()==0) resultList.add(novelResource);
-		}	
-			
+		}
+
 		if(resultList.size()==0){
 			message.setStatus(false);
 			message.setMessage("没有可插入的数据");
@@ -98,7 +100,7 @@ public class NovelCrawlerControl {
 			map.put("message", message);
 			return map;
 		}
-		
+
 		if(novelResourceService.bulkInsert(resultList)){
 			message.setStatus(true);
 			message.setMessage("批量插入成功");
@@ -110,10 +112,10 @@ public class NovelCrawlerControl {
 		}
 		map.put("message", message);
 		map.put("novelList", resultList);
-		return map;		
-		
+		return map;
+
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ResponseBody
 	@RequestMapping(value="/novelCrawler/getCrawlStatus.control")
@@ -125,9 +127,9 @@ public class NovelCrawlerControl {
 		map.put("list", list);
 		map.put("count", count);
 		return map;
-		
+
 	}
-	
+
 	/**
 	 * 开始爬取资源(将爬取到的资源下载到本地路径下)
 	 * @param request
@@ -141,15 +143,15 @@ public class NovelCrawlerControl {
 		String address = "C:\\Users\\Administrator\\Desktop\\testDwonload\\";
 		commonParam.setAddress(address);
 		novelResourceService.excavateResource(commonParam);
-		
+
 	}
-	
+
 	/**
 	 * 单个文件下载
 	 * @param request
 	 * @param page
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@RequestMapping(value="/novelCrawler/startCrawlerWorkSingle.control",method=RequestMethod.GET)
 	public void startCrawlerWorkSingle() throws IOException{
@@ -158,7 +160,7 @@ public class NovelCrawlerControl {
 		String address = "C:\\Users\\Administrator\\Desktop\\testDwonload\\";
 		HttpGetDownFile.filterLinkAndDownloadAndSave(link, address);
 	}
-	
+
 	/**
 	 * 爬虫分页操作
 	 * @throws IOException

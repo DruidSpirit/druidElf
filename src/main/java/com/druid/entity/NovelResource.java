@@ -1,5 +1,9 @@
 package com.druid.entity;
 
+import lombok.Builder;
+import lombok.Data;
+/*@Builder
+@Data*/
 public class NovelResource {
     private Integer id;
 
@@ -35,6 +39,29 @@ public class NovelResource {
 
     private String crawlStartLink;
 
+    public NovelResource() {
+    }
+
+    public NovelResource(Integer id, Integer type, String linkTxt, String name, String intro, String linkResourceAdress, Long addTime, Long popular, String linkZip, String linkOther, Integer status, String siteAddress, String linkSrc, Double size, Long turnOverTime, String author, String crawlStartLink) {
+        this.id = id;
+        this.type = type;
+        this.linkTxt = linkTxt;
+        this.name = name;
+        this.intro = intro;
+        this.linkResourceAdress = linkResourceAdress;
+        this.addTime = addTime;
+        this.popular = popular;
+        this.linkZip = linkZip;
+        this.linkOther = linkOther;
+        this.status = status;
+        this.siteAddress = siteAddress;
+        this.linkSrc = linkSrc;
+        this.size = size;
+        this.turnOverTime = turnOverTime;
+        this.author = author;
+        this.crawlStartLink = crawlStartLink;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -56,7 +83,7 @@ public class NovelResource {
     }
 
     public void setLinkTxt(String linkTxt) {
-        this.linkTxt = linkTxt == null ? null : linkTxt.trim();
+        this.linkTxt = linkTxt;
     }
 
     public String getName() {
@@ -64,7 +91,7 @@ public class NovelResource {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getIntro() {
@@ -72,7 +99,7 @@ public class NovelResource {
     }
 
     public void setIntro(String intro) {
-        this.intro = intro == null ? null : intro.trim();
+        this.intro = intro;
     }
 
     public String getLinkResourceAdress() {
@@ -80,7 +107,7 @@ public class NovelResource {
     }
 
     public void setLinkResourceAdress(String linkResourceAdress) {
-        this.linkResourceAdress = linkResourceAdress == null ? null : linkResourceAdress.trim();
+        this.linkResourceAdress = linkResourceAdress;
     }
 
     public Long getAddTime() {
@@ -104,7 +131,7 @@ public class NovelResource {
     }
 
     public void setLinkZip(String linkZip) {
-        this.linkZip = linkZip == null ? null : linkZip.trim();
+        this.linkZip = linkZip;
     }
 
     public String getLinkOther() {
@@ -112,7 +139,7 @@ public class NovelResource {
     }
 
     public void setLinkOther(String linkOther) {
-        this.linkOther = linkOther == null ? null : linkOther.trim();
+        this.linkOther = linkOther;
     }
 
     public Integer getStatus() {
@@ -128,7 +155,7 @@ public class NovelResource {
     }
 
     public void setSiteAddress(String siteAddress) {
-        this.siteAddress = siteAddress == null ? null : siteAddress.trim();
+        this.siteAddress = siteAddress;
     }
 
     public String getLinkSrc() {
@@ -136,7 +163,7 @@ public class NovelResource {
     }
 
     public void setLinkSrc(String linkSrc) {
-        this.linkSrc = linkSrc == null ? null : linkSrc.trim();
+        this.linkSrc = linkSrc;
     }
 
     public Double getSize() {
@@ -160,7 +187,7 @@ public class NovelResource {
     }
 
     public void setAuthor(String author) {
-        this.author = author == null ? null : author.trim();
+        this.author = author;
     }
 
     public String getCrawlStartLink() {
@@ -168,6 +195,6 @@ public class NovelResource {
     }
 
     public void setCrawlStartLink(String crawlStartLink) {
-        this.crawlStartLink = crawlStartLink == null ? null : crawlStartLink.trim();
+        this.crawlStartLink = crawlStartLink;
     }
 }

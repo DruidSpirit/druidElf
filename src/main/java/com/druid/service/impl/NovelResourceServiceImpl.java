@@ -2,12 +2,9 @@ package com.druid.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.ibatis.session.SqlSession;
-import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,10 +12,8 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.druid.dao.EmployeeMapper;
 import com.druid.dao.NovelResourceMapper;
 import com.druid.dto.CommonParam;
-import com.druid.entity.Employee;
 import com.druid.entity.NovelResource;
 import com.druid.entity.NovelResourceExample;
 import com.druid.service.NovelResourceService;
@@ -30,7 +25,7 @@ public class NovelResourceServiceImpl implements NovelResourceService{
 	private NovelResourceMapper novelResourceMapper;
 	@Autowired
 	SqlSession sqlSession;
-	
+
 	private List<String> toDoList = new ArrayList<String>();
 	private List<NovelResource> novelResourceList = new ArrayList<NovelResource>();
 
@@ -39,245 +34,249 @@ public class NovelResourceServiceImpl implements NovelResourceService{
 		// TODO Auto-generated method stub
 		return novelResourceMapper.selectByExample(example);
 	}
-	
+
 	@Override
 	public boolean bulkInsert(List<NovelResource> novelResourceList) {
 		// TODO Auto-generated method stub
 		try {
-				NovelResourceMapper mapper = sqlSession.getMapper(NovelResourceMapper.class);
-				for (NovelResource novelResource : novelResourceList) {
-					mapper.insertSelective(novelResource);
-				}
-				return true;
+			NovelResourceMapper mapper = sqlSession.getMapper(NovelResourceMapper.class);
+			for (NovelResource novelResource : novelResourceList) {
+				mapper.insertSelective(novelResource);
+			}
+			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
-		}						
+		}
 		return false;
 	}
-	
+
 
 	@Override
 	public List<NovelResource> selectByNovelResource(NovelResource novelResource) {
 		// TODO Auto-generated method stub
 		return novelResourceMapper.selectByNovelResource(novelResource);
 	}
-	
+
 	@Override
 	public List<NovelResource> getResourceToDataBase(CommonParam commonParam) {
 		// TODO Auto-generated method stub
 		toDoList.clear();
 		List<NovelResource> tmp = new ArrayList<NovelResource>();
-		
+
 		List<String> toDoListHref = new ArrayList<String>();
 		try {
 			Document doc = Jsoup.connect(commonParam.getLink()).timeout(4000).get();
 			Elements links = doc.select(".listBox a[href]");
-			
+
 			for (Element link : links) {
+//				NovelResource novelResource =  NovelResource.builder().build();
+				// NovelResource.builder().build()
 				NovelResource novelResource = new NovelResource();
+
 				Element imglink = link.getElementsByTag("img").first();
 				Element alink = link.getElementsByTag("a").first();
-				if (imglink==null) continue;//¹ýÂËÍ¼Æ¬Á´½ÓÎª¿ÕµÄÔªËØ
-				if (alink==null) continue;//¹ýÂËa±êÇ©Îª¿ÕµÄÔªËØ
-				
-				String href = alink.absUrl("href");//µÃµ½¾ø¶ÔÂ·¾¶
-				String src = imglink.absUrl("src");//µÃµ½¾ø¶ÔÂ·¾¶
-				novelResource.setCrawlStartLink(commonParam.getLink());//¼ÇÂ¼ÅÀÈ¡Ô´Á´½Ó
-				novelResource.setLinkResourceAdress(href);					
+				if (imglink==null) continue;//ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Îªï¿½Õµï¿½Ôªï¿½ï¿½
+				if (alink==null) continue;//ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½Ç©Îªï¿½Õµï¿½Ôªï¿½ï¿½
+
+				String href = alink.absUrl("href");//ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+				String src = imglink.absUrl("src");//ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+				novelResource.setCrawlStartLink(commonParam.getLink());//ï¿½ï¿½Â¼ï¿½ï¿½È¡Ô´ï¿½ï¿½ï¿½ï¿½
+				novelResource.setLinkResourceAdress(href);
 				novelResource.setLinkSrc(src);
 				novelResource.setType(commonParam.getType());
 				novelResource.setSiteAddress(commonParam.getSiteAddress());
-				if (toDoList.contains(href)) continue;//ÌÞ³ýÖØ¸´Á´½Ó	
-						toDoList.add(href);
-				
+				if (toDoList.contains(href)) continue;//ï¿½Þ³ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
+				toDoList.add(href);
+
 				String title = imglink.attr("alt");
-				
+
 				tmp.add(novelResource);
-				//¿ªÊ¼ÏÂÔØÍ¼Æ¬
+				//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
 				//getImg(src,imgFileAdre);
 				toDoListHref.add(href);
 				List<String> contentTmp = new ArrayList<String>();
-				contentTmp = toDoListHref;													
-				
+				contentTmp = toDoListHref;
+
 			}
 			return toDoList2(tmp,2);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-						 
+
 		return null;
 	}
-	
+
 	@Override
 	public List<NovelResource> excavateResource(CommonParam commonParam) {
 		// TODO Auto-generated method stub
-	
-	List<String> toDoListHref = new ArrayList<String>();
-	
+
+		List<String> toDoListHref = new ArrayList<String>();
+
+		try {
+			Document doc = Jsoup.connect(commonParam.getLink()).timeout(4000).get();
+			Elements links = doc.select("a[href]");
+
+			for (Element link : links) {
+				Element imglink = link.getElementsByTag("img").first();
+				Element alink = link.getElementsByTag("a").first();
+				if (imglink==null) continue;//ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Îªï¿½Õµï¿½Ôªï¿½ï¿½
+				if (alink==null) continue;//ï¿½ï¿½ï¿½ï¿½aï¿½ï¿½Ç©Îªï¿½Õµï¿½Ôªï¿½ï¿½
+
+				String href = alink.absUrl("href");//ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+				String src = imglink.absUrl("src");//ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+
+
+				if (toDoList.contains(href)) continue;//ï¿½Þ³ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
+				toDoList.add(href);
+
+				String title = imglink.attr("alt");
+
+				//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
+				//getImg(src,imgFileAdre);
+				toDoListHref.add(href);
+				System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ö·ï¿½ï¿½"+href);
+				System.out.println(src);
+				System.out.println(title);
+
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		List<String> contentTmp = new ArrayList<String>();
+		contentTmp = toDoListHref;
+
+		toDoList1(contentTmp,2,commonParam.getAddress());
+
+		return novelResourceList;
+	}
+
+	/**
+	 * toDoList Ñ­ï¿½ï¿½ï¿½Ð¶Ó£ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½ëµ½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+	 * @param hrefs
+	 * @param grade
+	 * @return
+	 */
+	public List<String> toDoList1(List<String> hrefs,Integer grade,String storeAddress){
+		List<String> toDoListHref = new ArrayList<String>();
+		for (String string : hrefs) {
 			try {
-				Document doc = Jsoup.connect(commonParam.getLink()).timeout(4000).get();
-				Elements links = doc.select("a[href]");
-				
+				Document doc = Jsoup.connect(string).timeout(2000).get();
+				Elements links = doc.select(".showDown li:eq(3) script");
+
 				for (Element link : links) {
-					Element imglink = link.getElementsByTag("img").first();
-					Element alink = link.getElementsByTag("a").first();
-					if (imglink==null) continue;//¹ýÂËÍ¼Æ¬Á´½ÓÎª¿ÕµÄÔªËØ
-					if (alink==null) continue;//¹ýÂËa±êÇ©Îª¿ÕµÄÔªËØ
-					
-					String href = alink.absUrl("href");//µÃµ½¾ø¶ÔÂ·¾¶
-					String src = imglink.absUrl("src");//µÃµ½¾ø¶ÔÂ·¾¶
-										
-											
-					if (toDoList.contains(href)) continue;//ÌÞ³ýÖØ¸´Á´½Ó	
-							toDoList.add(href);
-					
-					String title = imglink.attr("alt");
-					
-					//¿ªÊ¼ÏÂÔØÍ¼Æ¬
-					//getImg(src,imgFileAdre);
+
+					Element alink = link.getElementsByTag("script").first();
+
+					if (alink==null) continue;
+
+					//ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½Óµï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					String href = alink.toString();
+					href = href.replace("\"", "");
+					href = href.split(",")[1];
+
+					if (toDoList.contains(href)) continue;//todolistï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å³ï¿½
+					toDoList.add(href);
 					toDoListHref.add(href);
-					System.out.println("ËùÊôÁ´½ÓµØÖ·ÊÇ"+href);
-					System.out.println(src);
-					System.out.println(title);
-																		
+					//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
+					HttpGetDownFile.filterLinkAndDownloadAndSave(href,storeAddress);
+					System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ö·ï¿½ï¿½"+href);
+//					NovelResource novelResource = NovelResource.builder().build();
+					NovelResource novelResource =  new NovelResource();
+					novelResource.setLinkResourceAdress(href);
+					novelResourceList.add(novelResource);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			List<String> contentTmp = new ArrayList<String>();
-			contentTmp = toDoListHref;
-			
-			 toDoList1(contentTmp,2,commonParam.getAddress());
-			
-		return novelResourceList;
-	}
-	
-	/**
-	 * toDoList Ñ­»·ÁÐ¶Ó£¬½«ÐÂ·¢ÏÖµÄÁ´½Ó¼ÓÈëµ½¹¤×÷ÁÐ¶ÓÖÐ²¢ÏÂÔØÖÁ±¾µØÂ·¾¶
-	 * @param hrefs
-	 * @param grade
-	 * @return
-	 */
-    public List<String> toDoList1(List<String> hrefs,Integer grade,String storeAddress){
-    	List<String> toDoListHref = new ArrayList<String>();
-    	for (String string : hrefs) {
-    		try {
-    			Document doc = Jsoup.connect(string).timeout(2000).get();
-    			Elements links = doc.select(".showDown li:eq(3) script");
-    			
-    			for (Element link : links) {
-    				
-    				Element alink = link.getElementsByTag("script").first();
-    			
-    				if (alink==null) continue;
-    				
-    				//¸ÃÍøÕ¾Á´½ÓµÄ×Ö·û´®´¦Àí
-    				String href = alink.toString();
-    				href = href.replace("\"", "");
-    				href = href.split(",")[1];   				
-    										
-    				if (toDoList.contains(href)) continue;//todolist¹¤×÷£¬½«ÖØ¸´Á´½ÓÅÅ³ý
-    					toDoList.add(href);
-    				toDoListHref.add(href);
-    				//¿ªÊ¼ÏÂÔØÍ¼Æ¬
-    				HttpGetDownFile.filterLinkAndDownloadAndSave(href,storeAddress);
-    				System.out.println("ËùÊôÁ´½ÓµØÖ·ÊÇ"+href);
-    				NovelResource novelResource = new NovelResource();
-    				novelResource.setLinkResourceAdress(href);
-    				novelResourceList.add(novelResource);
-    			}
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
 		}
 		return toDoListHref;
-    	
-		
-    }
 
-    /**
-	 * toDoList Ñ­»·ÁÐ¶Ó£¬½«ÐÂ·¢ÏÖµÄÁ´½Ó¼ÓÈëµ½¹¤×÷ÁÐ¶ÓÖÐ²¢½«Æä´æÈëÊý¾Ý¿â
-	 * @param hrefs
+
+	}
+
+	/**
+	 * toDoList Ñ­ï¿½ï¿½ï¿½Ð¶Ó£ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ó¼ï¿½ï¿½ëµ½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½
+	 * @param grade
 	 * @param grade
 	 * @return
 	 */
-    public List<NovelResource> toDoList2(List<NovelResource> tmp,Integer grade){
-    	
-    	List<String> toDoListHref = new ArrayList<String>();
-    	List<NovelResource> resultList = new ArrayList<NovelResource>();
-    	for (NovelResource novel : tmp) {
-    		
-    		try {
-    			Document doc = Jsoup.connect(novel.getLinkResourceAdress()).timeout(2000).get();
-    			Elements links = doc.select(".showBox");
-    			//Elements links2 = doc.select(".showDown li:eq(2) script");
-    			
-    				if(links.size()<3) continue;
-    				if(links.get(2).getElementsByTag("script").size()<2) continue;
-    				
-    				Element alinkZip = links.get(2).getElementsByTag("script").get(0);
-    				Element alinkTxt = links.get(2).getElementsByTag("script").get(1);
-    				
-    				if (alinkZip==null) continue;
-    				if (alinkTxt==null) continue;
-    				
-    				Elements novelDetail = links.get(0).getElementsByTag("li");	
-    				Elements novelName = links.get(0).getElementsByTag("h1");
-    				Element novelIntro = links.get(1).getElementsByTag("p").get(0);
-    				
-    				novel.setName(novelName.text());//ÉèÖÃÎÄ¼þÃû³Æ
-    				
-    				novel.setPopular(Long.parseLong((novelDetail.get(0).text()).split("£º")[1]));//ÉèÖÃµã»÷´ÎÊý
-    				
-    				String sizeText = (novelDetail.get(1).text()).split("£º")[1];
-    				sizeText = sizeText.split("M")[0];
-    				novel.setSize(Double.parseDouble(sizeText));//ÉèÖÃÎÄ¼þ´óÐ¡
-    				   				
-    				if((novelDetail.get(3).text()).split("£º").length>1) {
-    					Long time = HttpGetDownFile.getTimeLong((novelDetail.get(3).text()).split("£º")[1],"yyyy-MM-dd HH:mm:ss");
-        				novel.setTurnOverTime(time);//ÉèÖÃ¸úÐÂÊ±¼ä
-    				}
-    				
-    				if((novelDetail.get(4).text()).split("£º").length>1){
-    					Integer status = ((novelDetail.get(4).text()).split("£º")[1]).equals("Á¬ÔØÖÐ")?1:0;
-        				novel.setStatus(status);//ÉèÖÃÁ¬ÔØ»¹ÊÇÍê½áµÄ×´Ì¬
-    				} 
-    				
-    				if((novelDetail.get(5).text()).split("£º").length>1) novel.setAuthor((novelDetail.get(5).text()).split("£º")[1]);
-    				novel.setIntro(novelIntro.text());//ÉèÖÃ¼ò½é
-    				novel.setAddTime(System.currentTimeMillis());//ÉèÖÃÌí¼ÓÊ±¼ä
-    				//¸ÃÍøÕ¾Á´½ÓµÄ×Ö·û´®´¦Àí(½âÑ¹ÎÄ¼þ)
-    				String hrefZip = alinkZip.toString();
-    				hrefZip = hrefZip.replace("\"", "");
-    				hrefZip = hrefZip.split(",")[1];   				
-    				//¸ÃÍøÕ¾Á´½ÓµÄ×Ö·û´®´¦Àí(txtÎÄ¼þ)
-    				String hrefTxt = alinkTxt.toString();
-    				hrefTxt = hrefTxt.replace("\"", "");
-    				hrefTxt = hrefTxt.split(",")[1]; 
-    				
-    				if (toDoList.contains(hrefTxt)) continue;//todolist¹¤×÷£¬½«ÖØ¸´Á´½ÓÅÅ³ý
-    					toDoList.add(hrefTxt);
-    				toDoListHref.add(hrefTxt);
-    				novel.setLinkTxt(hrefTxt);//ÏÂÔØµØÖ·Á´½Ó
-    				novel.setLinkZip(hrefZip);
-    				
-    				resultList.add(novel);
-    				System.out.println("ËùÊôÁ´½ÓµØÖ·ÊÇ"+hrefTxt);  				
-    			
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
+	public List<NovelResource> toDoList2(List<NovelResource> tmp,Integer grade){
+
+		List<String> toDoListHref = new ArrayList<String>();
+		List<NovelResource> resultList = new ArrayList<NovelResource>();
+		for (NovelResource novel : tmp) {
+
+			try {
+				Document doc = Jsoup.connect(novel.getLinkResourceAdress()).timeout(2000).get();
+				Elements links = doc.select(".showBox");
+				//Elements links2 = doc.select(".showDown li:eq(2) script");
+
+				if(links.size()<3) continue;
+				if(links.get(2).getElementsByTag("script").size()<2) continue;
+
+				Element alinkZip = links.get(2).getElementsByTag("script").get(0);
+				Element alinkTxt = links.get(2).getElementsByTag("script").get(1);
+
+				if (alinkZip==null) continue;
+				if (alinkTxt==null) continue;
+
+				Elements novelDetail = links.get(0).getElementsByTag("li");
+				Elements novelName = links.get(0).getElementsByTag("h1");
+				Element novelIntro = links.get(1).getElementsByTag("p").get(0);
+
+				novel.setName(novelName.text());//ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+
+				novel.setPopular(Long.parseLong((novelDetail.get(0).text()).split("ï¿½ï¿½")[1]));//ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
+				String sizeText = (novelDetail.get(1).text()).split("ï¿½ï¿½")[1];
+				sizeText = sizeText.split("M")[0];
+				novel.setSize(Double.parseDouble(sizeText));//ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡
+
+				if((novelDetail.get(3).text()).split("ï¿½ï¿½").length>1) {
+					Long time = HttpGetDownFile.getTimeLong((novelDetail.get(3).text()).split("ï¿½ï¿½")[1],"yyyy-MM-dd HH:mm:ss");
+					novel.setTurnOverTime(time);//ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+				}
+
+				if((novelDetail.get(4).text()).split("ï¿½ï¿½").length>1){
+					Integer status = ((novelDetail.get(4).text()).split("ï¿½ï¿½")[1]).equals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")?1:0;
+					novel.setStatus(status);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+				}
+
+				if((novelDetail.get(5).text()).split("ï¿½ï¿½").length>1) novel.setAuthor((novelDetail.get(5).text()).split("ï¿½ï¿½")[1]);
+				novel.setIntro(novelIntro.text());//ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½
+				novel.setAddTime(System.currentTimeMillis());//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+				//ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½Óµï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½Ñ¹ï¿½Ä¼ï¿½)
+				String hrefZip = alinkZip.toString();
+				hrefZip = hrefZip.replace("\"", "");
+				hrefZip = hrefZip.split(",")[1];
+				//ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½Óµï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(txtï¿½Ä¼ï¿½)
+				String hrefTxt = alinkTxt.toString();
+				hrefTxt = hrefTxt.replace("\"", "");
+				hrefTxt = hrefTxt.split(",")[1];
+
+				if (toDoList.contains(hrefTxt)) continue;//todolistï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å³ï¿½
+				toDoList.add(hrefTxt);
+				toDoListHref.add(hrefTxt);
+				novel.setLinkTxt(hrefTxt);//ï¿½ï¿½ï¿½Øµï¿½Ö·ï¿½ï¿½ï¿½ï¿½
+				novel.setLinkZip(hrefZip);
+
+				resultList.add(novel);
+				System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ö·ï¿½ï¿½"+hrefTxt);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return resultList;
-    	
-		
-    }
-    
+
+
+	}
+
 	@Override
 	public String nextPageUrl(String atPresentUrl){
 		Document doc;
@@ -285,22 +284,22 @@ public class NovelResourceServiceImpl implements NovelResourceService{
 			doc = Jsoup.connect(atPresentUrl).timeout(2000).get();
 			Elements links = doc.select(".tspage a[href]");
 			for (Element element : links) {
-				if(element.text().equals("ÏÂÒ»Ò³")) return element.absUrl("href");
+				if(element.text().equals("ï¿½ï¿½Ò»Ò³")) return element.absUrl("href");
 			}
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	public List<NovelResource> dealWithDocment(CommonParam commonParam){
 		return novelResourceList;
-		
+
 	}
 
 
-	
+
 }

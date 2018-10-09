@@ -3,10 +3,7 @@ package com.druid.realm;
 
 import com.druid.entity.DruidUser;
 import com.druid.service.DruidUserService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -29,8 +26,9 @@ public class UserRealm extends AuthorizingRealm{
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		// TODO Auto-generated method stub
+		UsernamePasswordToken userToken = (UsernamePasswordToken) token;
 
-		String username = token.getPrincipal().toString();
+		String username = userToken.getUsername();
 
 		Example example = new Example(DruidUser.class);
 		example.createCriteria().andEqualTo("username", username);
@@ -40,8 +38,8 @@ public class UserRealm extends AuthorizingRealm{
 		DruidUser druidUser = druidUserList.get(0);
 		String pwd = druidUser.getPassword();
 
-		//ByteSource credentialsSalt = ByteSource.Util.bytes(druidUser.getSalt());//使用账号作为盐值
-		return new SimpleAuthenticationInfo(username, pwd,getName());
+		ByteSource credentialsSalt = ByteSource.Util.bytes(druidUser.getSalt());//使用账号作为盐值
+		return new SimpleAuthenticationInfo(username, pwd,credentialsSalt,getName());
 	}
 	
 	//授权
@@ -50,4 +48,5 @@ public class UserRealm extends AuthorizingRealm{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

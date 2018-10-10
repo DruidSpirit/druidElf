@@ -53,7 +53,16 @@
         <javaClientGenerator targetPackage="com.druid.dao" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="druid_user">
+        <!--<table tableName="druid_user">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>-->
+        <table tableName="druid_security_role">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="druid_security_permission">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="druid_security_role_permission">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
     </context>

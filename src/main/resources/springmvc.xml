@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-      	<!-- 扫描组件 -->
-        <context:component-scan base-package="com.druid" use-default-filters="false">
-        	<!--只扫描控制器  -->
-        	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        </context:component-scan>
-        
-        <!--springmvc拦截器注册  -->
-        <mvc:interceptors>
-        		<!--没写mapping的拦截所有的mvc请求  -->
-	        		 <!--这个是自定义注解里面name级别的拦截器  -->
-	        		 <bean class="com.druid.interceptor.nameForAnnotation.CrossDomainInterceptor"/>
-        		 	 <bean class="com.druid.interceptor.nameForAnnotation.LoginInterceptor"/>
-        		 	 
-        	<!-- <mvc:interceptor>
-        		<mvc:mapping path="/updatestaff2"/>
-        		<bean  class="com.druid.interceptor.LoginCheck"></bean>
-        	</mvc:interceptor>  -->     	
-        </mvc:interceptors>
-        
-        <!--两个标配  -->
-        
-        <!--能支持springMVC更高级的功能，jsr303校验  快捷的ajax  映射鼎泰请求  -->
-        <mvc:annotation-driven/>
-        <!--将springMVC不能处理的请求交给Tomcat  -->
-        <mvc:default-servlet-handler/>
-        
-        <!-- 配置视图解析器，将Handler返回值解析为实际的物理视图 -->
-        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        	<property name="prefix" value="/WEB-INF/views/"/>
-        	<property name="suffix" value=".jsp"></property>
-        </bean>
-        
-        
+	<!-- 扫描组件 -->
+	<context:component-scan base-package="com.druid" use-default-filters="false">
+		<!--只扫描控制器  -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<!--springmvc拦截器注册  -->
+	<mvc:interceptors>
+		<!--没写mapping的拦截所有的mvc请求  -->
+		<!--这个是自定义注解里面name级别的拦截器  -->
+		<bean class="com.druid.interceptor.nameForAnnotation.CrossDomainInterceptor"/>
+		<bean class="com.druid.interceptor.nameForAnnotation.LoginInterceptor"/>
+
+		<!-- <mvc:interceptor>
+            <mvc:mapping path="/updatestaff2"/>
+            <bean  class="com.druid.interceptor.LoginCheck"></bean>
+        </mvc:interceptor>  -->
+	</mvc:interceptors>
+
+	<!--两个标配  -->
+
+	<!--能支持springMVC更高级的功能，jsr303校验  快捷的ajax  映射鼎泰请求  -->
+	<mvc:annotation-driven/>
+	<!--将springMVC不能处理的请求交给Tomcat  -->
+	<mvc:default-servlet-handler/>
+
+	<!-- 配置视图解析器，将Handler返回值解析为实际的物理视图 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+
 </beans>

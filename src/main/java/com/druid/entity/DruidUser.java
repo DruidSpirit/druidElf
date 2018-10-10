@@ -3,6 +3,7 @@ package com.druid.entity;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
 /*@Builder
@@ -24,19 +25,25 @@ public class DruidUser {
      * 密码
      */
     private String password;
-
-    private String salt;
-   /**
+    /**
      * 加密盐值
      */
+    private String salt;
+
+    /**
+     * 角色id
+     */
+   @Column(name = "role_id")
+   private Integer roleId;
 
     public DruidUser() {
     }
 
-    public DruidUser(String username, String password, String salt) {
+    public DruidUser(String username, String password, String salt, Integer roleId) {
         this.username = username;
         this.password = password;
         this.salt = salt;
+        this.roleId = roleId;
     }
 
     public Integer getId() {
@@ -69,5 +76,13 @@ public class DruidUser {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 }

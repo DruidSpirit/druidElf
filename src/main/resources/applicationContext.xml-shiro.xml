@@ -40,8 +40,17 @@
 		<!--配置securityManager-->
 		<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 			<property name="realm" ref="userRealm"/>
-		</bean> 
+		</bean>
 		
-		<bean id="userRealm" class="com.druid.realm.UserRealm"></bean>
+		<bean id="userRealm" class="com.druid.realm.UserRealm">
+			<property name="credentialsMatcher">
+				<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+					<!-- 加密算法为MD5 -->
+					<property name="hashAlgorithmName" value="MD5"></property>
+					<!-- 加密次数 -->
+					<property name="hashIterations" value="1024"></property>
+				</bean>
+			</property>
+		</bean>
 
 </beans>

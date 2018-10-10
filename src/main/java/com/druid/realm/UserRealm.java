@@ -1,21 +1,27 @@
 package com.druid.realm;
 
 
+import com.druid.entity.DruidSecurityRolePermission;
 import com.druid.entity.DruidUser;
 import com.druid.service.DruidUserService;
+import com.druid.service.RolePermissionService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserRealm extends AuthorizingRealm{
 	@Autowired
 	private DruidUserService druidUserService;
+	@Autowired
+	private RolePermissionService rolePermissionService;
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -38,15 +44,25 @@ public class UserRealm extends AuthorizingRealm{
 		DruidUser druidUser = druidUserList.get(0);
 		String pwd = druidUser.getPassword();
 
-		ByteSource credentialsSalt = ByteSource.Util.bytes(druidUser.getSalt());//使用账号作为盐值
-		return new SimpleAuthenticationInfo(username, pwd,credentialsSalt,getName());
+		ByteSource credentialsSalt = ByteSource.Util.bytes(druidUser.getSalt());//使用盐值
+		return new SimpleAuthenticationInfo(druidUser, pwd,credentialsSalt,getName());
 	}
 	
 	//授权
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		// TODO Auto-generated method stub
-		return null;
+		DruidUser druidUser = (DruidUser) principals.getPrimaryPrincipal();
+		Example example = new Example(DruidSecurityRolePermission.class);
+		example.createCriteria().andEqualTo("roleId", druidUser.getRoleId());
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		List<DruidSecurityRolePermission> druidSecurityRolePermissionList = rolePermissionService.selectByExample(example);
+
+		if (druidSecurityRolePermissionList == null || druidSecurityRolePermissionList.size()<=0) return null;
+		for (DruidSecurityRolePermission druidSecurityRolePermission:druidSecurityRolePermissionList) {
+			info.addStringPermission(druidSecurityRolePermission.getPermission());
+		}
+		return info;
 	}
 
 }

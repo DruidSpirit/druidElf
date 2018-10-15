@@ -372,11 +372,11 @@
 
 	  <!--lombok 插件-->
 	  <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-	  <dependency>
+	 <!-- <dependency>
 		  <groupId>org.projectlombok</groupId>
 		  <artifactId>lombok</artifactId>
 		  <version>1.16.16</version>
-	  </dependency>
+	  </dependency>-->
 
 
 	  <!--Excel导入导出-->

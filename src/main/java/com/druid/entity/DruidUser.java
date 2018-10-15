@@ -1,13 +1,10 @@
 package com.druid.entity;
 
-import lombok.Builder;
-import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
-/*@Builder
-@Data*/
+
 @Table(name = "druid_user")
 public class DruidUser {
     /**

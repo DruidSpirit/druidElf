@@ -71,7 +71,7 @@ public class NovelResourceServiceImpl implements NovelResourceService{
 			for (Element link : links) {
 //				NovelResource novelResource =  NovelResource.builder().build();
 				// NovelResource.builder().build()
-				NovelResource novelResource = new NovelResource();
+				NovelResource novelResource =  NovelResource.builder().build();
 
 				Element imglink = link.getElementsByTag("img").first();
 				Element alink = link.getElementsByTag("a").first();
@@ -184,7 +184,7 @@ public class NovelResourceServiceImpl implements NovelResourceService{
 					HttpGetDownFile.filterLinkAndDownloadAndSave(href,storeAddress);
 					System.out.println("�������ӵ�ַ��"+href);
 //					NovelResource novelResource = NovelResource.builder().build();
-					NovelResource novelResource =  new NovelResource();
+					NovelResource novelResource =  NovelResource.builder().build();
 					novelResource.setLinkResourceAdress(href);
 					novelResourceList.add(novelResource);
 				}

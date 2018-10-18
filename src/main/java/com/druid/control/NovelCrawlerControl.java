@@ -38,7 +38,7 @@ public class NovelCrawlerControl {
 	private Message message = new Message();
 	private Map map = new HashMap<>();
 	/**
-	 * µÃµ½ÅÀ³æÅÀÈ¡×ÊÔ´µÄÁÐ±í
+	 * ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Ð±ï¿½
 	 * @param request
 	 * @param page
 	 * @return
@@ -55,7 +55,7 @@ public class NovelCrawlerControl {
 	}
 
 	/**
-	 * ¿ªÊ¼ÅÀÈ¡×ÊÔ´(½«ÅÀÈ¡µÄ×ÊÔ´·Åµ½Êý¾Ý¿âÖÐ)
+	 * ï¿½ï¿½Ê¼ï¿½ï¿½È¡ï¿½ï¿½Ô´(ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ô´ï¿½Åµï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½)
 	 * @param request
 	 * @param page
 	 * @return
@@ -67,7 +67,7 @@ public class NovelCrawlerControl {
 
 		if(url==null||novelType==null){
 			message.setStatus(false);
-			message.setMessage("Á´½Ó»òÕßÀàÐÍÎª¿Õ");
+			message.setMessage("ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½");
 			map.put("message", message);
 			return map;
 		};
@@ -84,7 +84,7 @@ public class NovelCrawlerControl {
 			NovelResource novelResource = tmp.get(j);
 
 //			NovelResource novelTmp = NovelResource.builder().build();
-			NovelResource novelTmp = new NovelResource();
+			NovelResource novelTmp =  NovelResource.builder().build();
 			if(novelResource.getLinkTxt()==null) continue;
 			novelTmp.setLinkTxt(novelResource.getLinkTxt());
 
@@ -94,7 +94,7 @@ public class NovelCrawlerControl {
 
 		if(resultList.size()==0){
 			message.setStatus(false);
-			message.setMessage("Ã»ÓÐ¿É²åÈëµÄÊý¾Ý");
+			message.setMessage("Ã»ï¿½Ð¿É²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 			String nextPageUrl = novelResourceService.nextPageUrl(url);
 			message.setOtherMessage(nextPageUrl);
 			map.put("message", message);
@@ -103,12 +103,12 @@ public class NovelCrawlerControl {
 
 		if(novelResourceService.bulkInsert(resultList)){
 			message.setStatus(true);
-			message.setMessage("ÅúÁ¿²åÈë³É¹¦");
+			message.setMessage("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½");
 			String nextPageUrl = novelResourceService.nextPageUrl(url);
 			message.setOtherMessage(nextPageUrl);
 		}else{
 			message.setStatus(false);
-			message.setMessage("ÅúÁ¿²åÈëÊ§°Ü");
+			message.setMessage("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
 		}
 		map.put("message", message);
 		map.put("novelList", resultList);
@@ -131,7 +131,7 @@ public class NovelCrawlerControl {
 	}
 
 	/**
-	 * ¿ªÊ¼ÅÀÈ¡×ÊÔ´(½«ÅÀÈ¡µ½µÄ×ÊÔ´ÏÂÔØµ½±¾µØÂ·¾¶ÏÂ)
+	 * ï¿½ï¿½Ê¼ï¿½ï¿½È¡ï¿½ï¿½Ô´(ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½)
 	 * @param request
 	 * @param page
 	 * @return
@@ -147,7 +147,7 @@ public class NovelCrawlerControl {
 	}
 
 	/**
-	 * µ¥¸öÎÄ¼þÏÂÔØ
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * @param request
 	 * @param page
 	 * @return
@@ -155,14 +155,14 @@ public class NovelCrawlerControl {
 	 */
 	@RequestMapping(value="/novelCrawler/startCrawlerWorkSingle.control",method=RequestMethod.GET)
 	public void startCrawlerWorkSingle() throws IOException{
-		String link = "https://dd.sjtxt.la/down/89/89327/ºé»ÄÖ®Ñý»ÊÄæÌì.txt";
+		String link = "https://dd.sjtxt.la/down/89/89327/ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.txt";
 		//D:\\getPicFiles\\
 		String address = "C:\\Users\\Administrator\\Desktop\\testDwonload\\";
 		HttpGetDownFile.filterLinkAndDownloadAndSave(link, address);
 	}
 
 	/**
-	 * ÅÀ³æ·ÖÒ³²Ù×÷
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
 	 * @throws IOException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })

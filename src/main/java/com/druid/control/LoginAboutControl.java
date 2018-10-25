@@ -2,6 +2,7 @@ package com.druid.control;
 
 import java.io.Serializable;
 
+import com.druid.definedAnnotation.Interceptors;
 import com.druid.service.DruidUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@Interceptors(name = "CrossDomainInterceptor")
 public class LoginAboutControl  implements Serializable{
 
 	/**
@@ -25,7 +27,7 @@ public class LoginAboutControl  implements Serializable{
 	 */
 	@RequestMapping(value="/toLogin")
 	public String toLogin(){
-		System.out.println("进入了登入页面!");
+		System.out.println("123456");
 		
 		return "login";
 		

@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.druid.definedAnnotation.Interceptors;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -32,6 +33,11 @@ private Annotation interceptor;
  		Interceptor methodAnnotation = method.getAnnotation(Interceptor.class);*/
         interceptor = handlerMethod.getMethodAnnotation(getAnnotation());
        // Object object =  handlerMethod.getMethodAnnotation(Interceptor.class);
+        if (interceptor == null) {
+            Object bean = handlerMethod.getBean();
+            Method method = handlerMethod.getMethod();
+            interceptor = bean.getClass().getAnnotation(Interceptors.class);
+        }
         if (interceptor == null)
             return false;
         

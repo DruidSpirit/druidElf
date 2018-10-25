@@ -6,6 +6,10 @@
   <packaging>war</packaging>
 	<properties>
 		<org.mapstruct.version>1.2.0.Final</org.mapstruct.version>
+		<lombok.version>1.16.16</lombok.version>
+		<spring.about.version>5.0.9.RELEASE</spring.about.version>
+		<jackson.version>2.9.6</jackson.version>
+		<excel.easypoi.version>3.2.0</excel.easypoi.version>
 	</properties>
   <build>
   	 <resources>  
@@ -40,6 +44,11 @@
 						  <artifactId>mapstruct-processor</artifactId>
 						  <version>${org.mapstruct.version}</version>
 					  </path>
+					  <path>
+						  <groupId>org.projectlombok</groupId>
+						  <artifactId>lombok</artifactId>
+						  <version>${lombok.version}</version>
+					  </path>
 				  </annotationProcessorPaths>
 			  </configuration>
 		  </plugin>
@@ -58,7 +67,7 @@
 	  <dependency>
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-webmvc</artifactId>
-		  <version>5.0.9.RELEASE</version>
+		  <version>${spring.about.version}</version>
 	  </dependency>
 
 
@@ -67,7 +76,7 @@
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-jdbc</artifactId>
-	    <version>5.0.9.RELEASE</version>
+	    <version>${spring.about.version}</version>
 	</dependency>
 	
 	<!--spring 单元测试  -->
@@ -75,7 +84,7 @@
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-test</artifactId>
-	    <version>5.0.9.RELEASE</version>
+	    <version>${spring.about.version}</version>
 	    <scope>test</scope>
 	</dependency>
 	
@@ -86,7 +95,7 @@
 	  <dependency>
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-aspects</artifactId>
-		  <version>5.0.9.RELEASE</version>
+		  <version>${spring.about.version}</version>
 	  </dependency>
 
 	
@@ -282,7 +291,7 @@
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-context</artifactId>
-	    <version>5.0.9.RELEASE</version>
+	    <version>${spring.about.version}</version>
 	</dependency>
 	
 	<!--jsoup爬虫 HTML解析  -->
@@ -310,19 +319,19 @@
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-core</artifactId>
-	    <version>2.9.6</version>
+	    <version>${jackson.version}</version>
 	</dependency>
 	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-databind</artifactId>
-	    <version>2.9.6</version>
+	    <version>${jackson.version}</version>
 	</dependency>
 	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-annotations</artifactId>
-	    <version>2.9.6</version>
+	    <version>${jackson.version}</version>
 	</dependency>	
 	
 	<!--解析xml文件  -->
@@ -372,10 +381,10 @@
 
 	  <!--lombok 插件-->
 	  <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-	  <dependency>
+	 <dependency>
 		  <groupId>org.projectlombok</groupId>
 		  <artifactId>lombok</artifactId>
-		  <version>1.16.16</version>
+		  <version>${lombok.version}</version>
 	  </dependency>
 
 
@@ -383,17 +392,17 @@
 	  <dependency>
 		  <groupId>cn.afterturn</groupId>
 		  <artifactId>easypoi-base</artifactId>
-		  <version>3.2.0</version>
+		  <version>${excel.easypoi.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>cn.afterturn</groupId>
 		  <artifactId>easypoi-web</artifactId>
-		  <version>3.2.0</version>
+		  <version>${excel.easypoi.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>cn.afterturn</groupId>
 		  <artifactId>easypoi-annotation</artifactId>
-		  <version>3.2.0</version>
+		  <version>${excel.easypoi.version}</version>
 	  </dependency>
 	  <!--数据对象转换-->
 	  <!-- use mapstruct-jdk8 for Java 8 or higher -->

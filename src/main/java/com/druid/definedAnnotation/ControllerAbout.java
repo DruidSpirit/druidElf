@@ -15,7 +15,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@CrossOrigin(origins = "http://192.168.2.192:8083", allowCredentials = "true",methods = RequestMethod.POST) // 跨域设置
+@CrossOrigin(origins = {"http://192.168.2.192:8083","http://192.168.2.129:8083"}, allowCredentials = "true",methods = RequestMethod.POST) // 跨域设置
 @Controller // 控制层扫描
 @ResponseBody // 返回接送参数
 @Documented // 生成文档

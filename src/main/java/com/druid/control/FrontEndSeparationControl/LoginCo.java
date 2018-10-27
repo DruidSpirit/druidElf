@@ -19,7 +19,6 @@ public class LoginCo {
      */
     @RequestMapping(value="/loginSubmit")
     public String login(@RequestBody DruidUser user){
-
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
         try {

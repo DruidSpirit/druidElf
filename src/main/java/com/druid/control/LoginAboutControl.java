@@ -13,13 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @ControllerAbout
-@Interceptors(name = "LoginInterceptor")
-public class LoginAboutControl  implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2821530132354966665L;
+@RequestMapping(value = "/innerLogin")
+public class LoginAboutControl{
 
 	/**
 	 * 跳转登入页面

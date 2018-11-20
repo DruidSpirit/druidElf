@@ -1,11 +1,14 @@
 package multithreading;
 
+import com.druid.util.ConnectionPoolSetting;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MultithreadingTest {
     public static void main(String[] args) {
-        test2();
+        //test2();
+        test3();
     }
 
     /**
@@ -40,5 +43,16 @@ public class MultithreadingTest {
         pool.submit(thread2);
         pool.submit(thread3);
         pool.shutdown();
+    }
+
+    /**
+     * 使用静态块的方式来创建线程池
+     */
+    public static void test3 () {
+        MultithreadingService multithreadingService = new MultithreadingService();
+        for (int i = 0;i<30;i++){
+            ConnectionPoolSetting.executorService.submit(new Thread(multithreadingService));
+        }
+        ConnectionPoolSetting.executorService.shutdown();
     }
 }

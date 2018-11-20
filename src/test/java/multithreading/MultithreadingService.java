@@ -1,12 +1,24 @@
 package multithreading;
 
+import com.druid.entity.NovelResource;
+
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MultithreadingService implements Runnable {
     private Lock lock = new ReentrantLock();
+    private List<NovelResource> list;
     int i = 0;
     int j = 50;
+
+    public MultithreadingService() {
+    }
+
+    public MultithreadingService(List<NovelResource> list) {
+        this.list = list;
+    }
+
     @Override
     public void run() {
        test2();
@@ -42,6 +54,13 @@ public class MultithreadingService implements Runnable {
                 lock.unlock();
             }
 
+        }
+    }
+    void startRun () {
+        synchronized (new Object()) {
+            for (NovelResource novelResource:list) {
+                lock.lock();
+            }
         }
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.druid.dao.DruidNovelResourceMapper">
+  <resultMap id="BaseResultMap" type="com.druid.entity.DruidNovelResource">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="link_txt" jdbcType="VARCHAR" property="linkTxt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="link_resource_adress" jdbcType="VARCHAR" property="linkResourceAdress" />
+    <result column="add_time" jdbcType="BIGINT" property="addTime" />
+    <result column="popular" jdbcType="BIGINT" property="popular" />
+    <result column="link_zip" jdbcType="VARCHAR" property="linkZip" />
+    <result column="link_other" jdbcType="VARCHAR" property="linkOther" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="site_address" jdbcType="VARCHAR" property="siteAddress" />
+    <result column="link_src" jdbcType="VARCHAR" property="linkSrc" />
+    <result column="size" jdbcType="DOUBLE" property="size" />
+    <result column="turn_over_time" jdbcType="BIGINT" property="turnOverTime" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="crawl_start_link" jdbcType="VARCHAR" property="crawlStartLink" />
+    <result column="has_loaddown" jdbcType="INTEGER" property="hasLoaddown" />
+    <result column="repository_path" jdbcType="VARCHAR" property="repositoryPath" />
+  </resultMap>
+</mapper>

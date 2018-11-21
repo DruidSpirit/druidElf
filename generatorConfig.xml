@@ -56,7 +56,7 @@
         <!--<table tableName="druid_user">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>-->
-        <table tableName="druid_security_role">
+        <!--<table tableName="druid_security_role">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         <table tableName="druid_security_permission">
@@ -64,6 +64,10 @@
         </table>
         <table tableName="druid_security_role_permission">
             <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
+        </table>-->
+        <!--小说主表-->
+        <!--<table tableName="druid_novel_resource">
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>-->
     </context>
 </generatorConfiguration>

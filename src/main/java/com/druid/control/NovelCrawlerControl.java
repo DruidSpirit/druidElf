@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.druid.entity.DruidNovelResource;
+import com.druid.service.DruidNovelResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -18,20 +20,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.druid.dto.CommonParam;
 import com.druid.dto.Message;
-import com.druid.entity.NovelResource;
-import com.druid.enums.NovelType;
 import com.druid.enums.UrlAboutNovelEnums;
 import com.druid.service.CommonService;
-import com.druid.service.NovelResourceService;
 import com.druid.util.HttpGetDownFile;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import tk.mybatis.mapper.entity.Example;
 
 @Controller
 @Scope("prototype")
 public class NovelCrawlerControl {
 	@Autowired
-	private NovelResourceService novelResourceService;
+	private DruidNovelResourceService novelResourceService;
 	@Autowired
 	private CommonService commonService;
 
@@ -46,9 +44,9 @@ public class NovelCrawlerControl {
 	@RequestMapping(value="/novelCrawler/getSourceList.control",method=RequestMethod.GET)
 	public String getSourceList(HttpServletRequest request,
 								@RequestParam(value="fenye",required=false) Integer page){
-		List<NovelResource> list = new ArrayList<NovelResource>();
+		List<DruidNovelResource> list = new ArrayList<DruidNovelResource>();
 		//PageHelper.startPage(1, 10);
-		list=novelResourceService.selectByNovelResource(null);
+		list=novelResourceService.selectByExample(null);
 		//PageInfo<NovelResource> p=new PageInfo<NovelResource>(list);
 		//request.setAttribute("pageInfo", p);
 		return "service";
@@ -56,8 +54,8 @@ public class NovelCrawlerControl {
 
 	/**
 	 * ��ʼ��ȡ��Դ(����ȡ����Դ�ŵ����ݿ���)
-	 * @param request
-	 * @param page
+	 * @param url
+	 * @param novelType
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -77,18 +75,19 @@ public class NovelCrawlerControl {
 
 		commonParam.setType(novelType);
 		commonParam.setSiteAddress(UrlAboutNovelEnums.urlSite0.getUrl());
-		List<NovelResource> tmp = novelResourceService.getResourceToDataBase(commonParam);
-		List<NovelResource> resultList = new ArrayList<NovelResource>();
+		List<DruidNovelResource> tmp = novelResourceService.getResourceToDataBase(commonParam);
+		List<DruidNovelResource> resultList = new ArrayList<DruidNovelResource>();
 
 		for (int j = 0; j < tmp.size(); j++) {
-			NovelResource novelResource = tmp.get(j);
+			DruidNovelResource novelResource = tmp.get(j);
 
 //			NovelResource novelTmp = NovelResource.builder().build();
-			NovelResource novelTmp =  NovelResource.builder().build();
+			DruidNovelResource novelTmp =  DruidNovelResource.builder().build();
 			if(novelResource.getLinkTxt()==null) continue;
 			novelTmp.setLinkTxt(novelResource.getLinkTxt());
-
-			List<NovelResource> tmp2 = novelResourceService.selectByNovelResource(novelTmp);
+			Example example = new Example(DruidNovelResource.class);
+			example.createCriteria().andEqualTo("linkTxt",novelTmp.getLinkTxt());
+			List<DruidNovelResource> tmp2 = novelResourceService.selectByExample(example);
 			if(tmp2.size()==0) resultList.add(novelResource);
 		}
 
@@ -132,8 +131,6 @@ public class NovelCrawlerControl {
 
 	/**
 	 * ��ʼ��ȡ��Դ(����ȡ������Դ���ص�����·����)
-	 * @param request
-	 * @param page
 	 * @return
 	 */
 	@RequestMapping(value="/novelCrawler/startCrawlerWork.control",method=RequestMethod.GET)
@@ -148,8 +145,6 @@ public class NovelCrawlerControl {
 
 	/**
 	 * �����ļ�����
-	 * @param request
-	 * @param page
 	 * @return
 	 * @throws IOException
 	 */

@@ -1,9 +1,7 @@
+/*
 package com.druid.control;
 
-import com.druid.dto.mapstruct.TestMapStruct;
 import com.druid.dto.vm.testVm;
-import com.druid.entity.NovelResource;
-import com.druid.service.NovelResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -23,12 +21,14 @@ public class TestmapsturctControl {
     private NovelResourceService novelResourceService;
     @Autowired
     private TestMapStruct testMapStruct;
-    /**
+    */
+/**
      * 得到爬虫爬取资源的列表
      * @param request
      * @param page
      * @return
-     */
+     *//*
+
     @RequestMapping(value="/novelCrawler/test.control",method=RequestMethod.GET)
     public String testList(HttpServletRequest request,
                                 @RequestParam(value="fenye",required=false) Integer page){
@@ -41,3 +41,4 @@ public class TestmapsturctControl {
         return "service";
     }
 }
+*/

@@ -66,8 +66,8 @@
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>-->
         <!--小说主表-->
-        <!--<table tableName="druid_novel_resource">
+        <table tableName="druid_novel_resource">
             <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>-->
+        </table>
     </context>
 </generatorConfiguration>

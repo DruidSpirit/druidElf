@@ -22,7 +22,7 @@
     <result column="turn_over_time" jdbcType="BIGINT" property="turnOverTime" />
     <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="crawl_start_link" jdbcType="VARCHAR" property="crawlStartLink" />
-    <result column="has_loaddown" jdbcType="INTEGER" property="hasLoaddown" />
+    <result column="has_loaddown" jdbcType="BIT" property="hasLoaddown" />
     <result column="repository_path" jdbcType="VARCHAR" property="repositoryPath" />
   </resultMap>
 </mapper>

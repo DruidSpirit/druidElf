@@ -1,23 +1,22 @@
 package multithreading;
 
+import com.druid.dao.DruidNovelResourceMapper;
 import com.druid.entity.DruidNovelResource;
 import com.druid.service.DruidNovelResourceService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 public class MultithreadingService implements Runnable {
     private Lock lock = new ReentrantLock();
     private DruidNovelResource novelResource;
-    private DruidNovelResourceService druidNovelResourceService;
+    private DruidNovelResourceMapper druidNovelResourceService;
     int i = 0;
     int j = 50;
 
     public MultithreadingService() {
     }
 
-    public MultithreadingService(DruidNovelResource novelResource, DruidNovelResourceService druidNovelResourceService) {
+    public MultithreadingService(DruidNovelResource novelResource, DruidNovelResourceMapper druidNovelResourceService) {
         this.novelResource = novelResource;
         this.druidNovelResourceService = druidNovelResourceService;
     }
@@ -63,11 +62,16 @@ public class MultithreadingService implements Runnable {
     void startRun () {
         if (novelResource.getHasLoaddown()){
             System.out.println(Thread.currentThread().getName()+":"+novelResource.getName());
-            synchronized (new Object()) {
-                lock.lock();
-                int a = druidNovelResourceService.updateNotNull(DruidNovelResource.builder().id(novelResource.getId()).hasLoaddown(false).build());
-                lock.unlock();
-              //  System.out.println("结果是：" + a);
+                DruidNovelResource druidNovelResource2 = DruidNovelResource.builder()
+                        .id(novelResource.getId())
+                        .hasLoaddown(false)
+                        .build();
+                novelResource.setHasLoaddown(false);
+                // 在spring中配置SqlSessionTemplate保证线程安全
+            try {
+                druidNovelResourceService.updateByPrimaryKeySelective(druidNovelResource2);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
 

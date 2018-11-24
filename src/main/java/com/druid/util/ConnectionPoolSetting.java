@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 public class ConnectionPoolSetting {
     public static ExecutorService executorService;
     // 连接池大小
-    private static final int poolSize = 5;
+    private static final int poolSize = 2;
     static {
         executorService = Executors.newFixedThreadPool(poolSize);
     }

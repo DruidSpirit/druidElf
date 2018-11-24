@@ -29,17 +29,34 @@ public class StartReptile {
     SqlSessionFactory sqlSessionFactory;
     @Test
     public void toStart () {
+        test2();
+    }
+    void test1 () {
         PageHelper.startPage(1,10);
         List<DruidNovelResource> novelResourceList = druidNovelResourceService.selectByExample(null);
         // DruidNovelResourceMapper mapper = sqlSession2.getMapper(DruidNovelResourceMapper.class);
         for (DruidNovelResource novelResource:novelResourceList) {
             try {
-                SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
-                DruidNovelResourceMapper mapper = sqlSessionTemplate.getMapper(DruidNovelResourceMapper.class);
+                 SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
+                 DruidNovelResourceMapper mapper = sqlSessionTemplate.getMapper(DruidNovelResourceMapper.class);
                 ConnectionPoolSetting.executorService.submit(new MultithreadingService(novelResource,mapper));
             }catch (Exception e){
                 e.printStackTrace();
             }
+
+        }
+        ConnectionPoolSetting.executorService.shutdown();
+    }
+    void test2(){
+        PageHelper.startPage(1,10);
+        List<DruidNovelResource> novelResourceList = druidNovelResourceService.selectByExample(null);
+        // DruidNovelResourceMapper mapper = sqlSession2.getMapper(DruidNovelResourceMapper.class);
+        // for (DruidNovelResource novelResource:novelResourceList) {
+            try {
+                ConnectionPoolSetting.executorService.submit(new MultithreadingService(novelResourceList.get(0),sqlSessionFactory));
+            }catch (Exception e){
+                e.printStackTrace();
+         //   }
 
         }
         ConnectionPoolSetting.executorService.shutdown();

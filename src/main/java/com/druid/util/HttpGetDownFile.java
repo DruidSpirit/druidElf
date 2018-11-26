@@ -59,7 +59,7 @@ public class HttpGetDownFile {
 
 		Connection request = Jsoup.connect(link).referrer(link)
 				.userAgent(UrlAboutNovelEnums.UserAgent7.getUrl())
-				.timeout(60000)//请求超时时间设置
+				.timeout(5*60000)//请求超时时间设置
 				.maxBodySize(1024*1024*20)//得到的文件最大值20M
 				.ignoreContentType(true)//忽略返回数据类型
 				.followRedirects(false);//不允许重定向
@@ -73,13 +73,15 @@ public class HttpGetDownFile {
 		//得到链接的后缀名称即文件名称
 		String[] url = redir.toString().split("");//
 		String names[] = redir.toString().split("/");
+		String names2[] = link.split("/");
 		String fileName = names[names.length-1];//文件名称
+		String fileName2 = names2[names.length-1];//文件名称
 		String resultUrl = "";
 		
 		//对链接中出现的中文字符进行筛选
+		String regEx = "[\u4e00-\u9fa5]";
+		Pattern pat = Pattern.compile(regEx);
 		for (String string : url) {
-			String regEx = "[\u4e00-\u9fa5]";
-			Pattern pat = Pattern.compile(regEx);
 			Matcher matcher = pat.matcher(string);
 			if(matcher.find()) string = URLEncoder.encode(string, "utf-8");
 			resultUrl += string;
@@ -89,7 +91,8 @@ public class HttpGetDownFile {
 					
 		FileUtils.writeByteArrayToFile(new File(imageFileName), imgdata);*/
 		//String timeName = (new DateTime().toLocalDateTime().toString("yyyy年MM月dd日hh点mm分ss秒"))+ fileName;//根据当前时间合成的文件名		
-		
+		Matcher matcher2 = pat.matcher(fileName);
+		if(!matcher2.find()) fileName = fileName2;
 		String address = storageAddress + fileName;
 					
 		return downloadAndSaveFile(resultUrl,address);

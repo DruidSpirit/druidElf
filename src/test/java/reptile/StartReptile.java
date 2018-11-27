@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 @RunWith(SpringJUnit4ClassRunner.class)//?????????????
 @ContextConfiguration(locations={"classpath:applicationContext.xml"})
@@ -29,7 +30,7 @@ public class StartReptile {
     SqlSessionFactory sqlSessionFactory;
     @Test
     public void toStart () {
-        test2();
+        test5();
     }
     void test1 () {
         PageHelper.startPage(1,10);
@@ -58,6 +59,41 @@ public class StartReptile {
                 e.printStackTrace();
          //   }
 
+        }
+        ConnectionPoolSetting.executorService.shutdown();
+    }
+
+    void test3 () {
+        PageHelper.startPage(1,10);
+        List<DruidNovelResource> novelResourceList = druidNovelResourceService.selectByExample(null);
+        DruidNovelResourceMapper mapper = sqlSession2.getMapper(DruidNovelResourceMapper.class);
+        for (DruidNovelResource novelResource:novelResourceList) {
+            try {
+                ConnectionPoolSetting.executorService.submit(new MultithreadingService(novelResource,mapper));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        ConnectionPoolSetting.executorService.shutdown();
+    }
+    void test4 () {
+        PageHelper.startPage(1,10);
+        List<DruidNovelResource> novelResourceList = druidNovelResourceService.selectByExample(null);
+        for (DruidNovelResource novelResource:novelResourceList) {
+            try {
+                Future future = ConnectionPoolSetting.executorService.submit(new MultithreadingService(novelResource));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        ConnectionPoolSetting.executorService.shutdown();
+    }
+    void test5 () {
+        MultithreadingService multithreadingService = new MultithreadingService();
+        for (int i = 0;i<30;i++){
+            ConnectionPoolSetting.executorService.submit(new Thread(multithreadingService));
         }
         ConnectionPoolSetting.executorService.shutdown();
     }

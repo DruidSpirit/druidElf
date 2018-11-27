@@ -59,7 +59,9 @@
 		<constructor-arg name="executorType" value="BATCH"></constructor-arg>
 	</bean>
 	<bean id="sqlSession2" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+		<!--<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>-->
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+		<constructor-arg name="executorType" value="REUSE"></constructor-arg>
 	</bean>
 	<!--===================================================  -->
 

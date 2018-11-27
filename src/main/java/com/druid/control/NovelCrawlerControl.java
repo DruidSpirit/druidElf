@@ -36,7 +36,7 @@ public class NovelCrawlerControl {
 	private Message message = new Message();
 	private Map map = new HashMap<>();
 	/**
-	 * �õ�������ȡ��Դ���б�
+	 * ????????????????��?
 	 * @param request
 	 * @param page
 	 * @return
@@ -53,7 +53,7 @@ public class NovelCrawlerControl {
 	}
 
 	/**
-	 * ��ʼ��ȡ��Դ(����ȡ����Դ�ŵ����ݿ���)
+	 * ?????????(????????????????????)
 	 * @param url
 	 * @param novelType
 	 * @return
@@ -65,7 +65,7 @@ public class NovelCrawlerControl {
 
 		if(url==null||novelType==null){
 			message.setStatus(false);
-			message.setMessage("���ӻ�������Ϊ��");
+			message.setMessage("??????????????");
 			map.put("message", message);
 			return map;
 		};
@@ -93,7 +93,7 @@ public class NovelCrawlerControl {
 
 		if(resultList.size()==0){
 			message.setStatus(false);
-			message.setMessage("û�пɲ��������");
+			message.setMessage("??��?????????");
 			String nextPageUrl = novelResourceService.nextPageUrl(url);
 			message.setOtherMessage(nextPageUrl);
 			map.put("message", message);
@@ -102,12 +102,12 @@ public class NovelCrawlerControl {
 
 		if(novelResourceService.bulkInsert(resultList)){
 			message.setStatus(true);
-			message.setMessage("��������ɹ�");
+			message.setMessage("??????????");
 			String nextPageUrl = novelResourceService.nextPageUrl(url);
 			message.setOtherMessage(nextPageUrl);
 		}else{
 			message.setStatus(false);
-			message.setMessage("��������ʧ��");
+			message.setMessage("???????????");
 		}
 		map.put("message", message);
 		map.put("novelList", resultList);
@@ -130,7 +130,7 @@ public class NovelCrawlerControl {
 	}
 
 	/**
-	 * ��ʼ��ȡ��Դ(����ȡ������Դ���ص�����·����)
+	 * ?????????(?????????????????????��????)
 	 * @return
 	 */
 	@RequestMapping(value="/novelCrawler/startCrawlerWork.control",method=RequestMethod.GET)
@@ -144,20 +144,20 @@ public class NovelCrawlerControl {
 	}
 
 	/**
-	 * �����ļ�����
+	 * ???????????
 	 * @return
 	 * @throws IOException
 	 */
 	@RequestMapping(value="/novelCrawler/startCrawlerWorkSingle.control",method=RequestMethod.GET)
 	public void startCrawlerWorkSingle() throws IOException{
-		String link = "https://dd.sjtxt.la/down/89/89327/���֮��������.txt";
+		String link = "https://dd.sjtxt.la/down/89/89327/????????????.txt";
 		//D:\\getPicFiles\\
 		String address = "C:\\Users\\Administrator\\Desktop\\testDwonload\\";
 		HttpGetDownFile.filterLinkAndDownloadAndSave(link, address);
 	}
 
 	/**
-	 * �����ҳ����
+	 * ??????????
 	 * @throws IOException
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })

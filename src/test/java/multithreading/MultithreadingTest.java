@@ -1,14 +1,21 @@
 package multithreading;
 
+import c3p0Test.DruidNovleDealData;
+import c3p0Test.dataDeal;
+import com.druid.dao.DruidNovelResourceMapper;
+import com.druid.entity.DruidNovelResource;
 import com.druid.util.ConnectionPoolSetting;
+import org.mybatis.spring.SqlSessionTemplate;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MultithreadingTest {
     public static void main(String[] args) {
         //test2();
-        test3();
+        test4();
     }
 
     /**
@@ -54,5 +61,22 @@ public class MultithreadingTest {
             ConnectionPoolSetting.executorService.submit(new Thread(multithreadingService));
         }
         ConnectionPoolSetting.executorService.shutdown();
+    }
+
+    /**
+     * 连接mybatis并启动多线程测试
+     */
+    public static void test4 (){
+        List<DruidNovelResource> novelResourceList = DruidNovleDealData.dealDruidNovel();
+        for (DruidNovelResource novelResource:novelResourceList) {
+            try {
+                ConnectionPoolSetting.executorService.submit(new MultithreadingService(novelResource));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        ConnectionPoolSetting.executorService.shutdown();
+
     }
 }

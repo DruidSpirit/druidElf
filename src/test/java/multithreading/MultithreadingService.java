@@ -3,9 +3,11 @@ package multithreading;
 import com.druid.dao.DruidNovelResourceMapper;
 import com.druid.entity.DruidNovelResource;
 import com.druid.service.DruidNovelResourceService;
+import com.druid.util.HttpGetDownFile;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 
+import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 public class MultithreadingService implements Runnable {
@@ -22,6 +24,10 @@ public class MultithreadingService implements Runnable {
     public MultithreadingService() {
     }
 
+    public MultithreadingService(DruidNovelResource novelResource) {
+        this.novelResource = novelResource;
+    }
+
     public MultithreadingService(DruidNovelResource novelResource, DruidNovelResourceMapper druidNovelResourceService) {
         this.novelResource = novelResource;
         this.druidNovelResourceService = druidNovelResourceService;
@@ -34,8 +40,8 @@ public class MultithreadingService implements Runnable {
 
     @Override
     public void run() {
-        startRun2 ();
-       // test2();
+        startRun4 ();
+      //  test2();
     }
     void test1 (){
         synchronized (new Object()) {
@@ -105,5 +111,36 @@ public class MultithreadingService implements Runnable {
             }
         }
 
+    }
+
+    void startRun3 () {
+        if (!this.novelResource.getHasLoaddown()) {
+            System.out.println(Thread.currentThread().getName() + ":" + this.novelResource.getName());
+            String storeAdress = "D:\\" + this.novelResource.getRepositoryPath();
+            lock.lock();
+            try {
+                Boolean result = HttpGetDownFile.downloadAndSaveFile(this.novelResource.getLinkTxt(),storeAdress);
+                System.out.println("结果是："+result);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            lock.unlock();
+        }
+
+    }
+
+    void startRun4 () {
+        System.out.println("开始下载："+this.novelResource.getName()+this.novelResource.getHasLoaddown());
+       if (!this.novelResource.getHasLoaddown()) {
+           String storeAdress = "D:\\" + this.novelResource.getRepositoryPath();
+           System.out.println("开始下载："+this.novelResource.getName());
+           Boolean result = null;
+           try {
+               result = HttpGetDownFile.downloadAndSaveFile(this.novelResource.getLinkTxt(),storeAdress);
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+           System.out.println("结果是："+result);
+       }
     }
 }

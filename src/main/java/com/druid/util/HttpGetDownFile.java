@@ -21,8 +21,8 @@ import com.druid.enums.UrlAboutNovelEnums;
 public class HttpGetDownFile {
 	/**
 	 * 得到文件地址并下载文件(已经处理过的正常地址)
-	 * @param src
-	 * @param imageFileName 下载文件的储存地址(这里的路径名称包括文件名及其后缀)
+	 * @param link
+	 * @param storageAddress 下载文件的储存地址(这里的路径名称包括文件名及其后缀)
 	 * @throws IOException
 	 */
 	public static boolean downloadAndSaveFile(String link,String storageAddress) throws IOException{
@@ -50,11 +50,11 @@ public class HttpGetDownFile {
 	
 	/**
 	 * 过滤下载链接，清除重定向、链接中包含中文字符问题并下载存储文件
-	 * @param src
-	 * @param imageFileName 下载文件的储存地址(这里的文件名称不包括文件名)
+	 * @param link
+	 * @param storageAddress 下载文件的储存地址(这里的文件名称不包括文件名)
 	 * @throws IOException
 	 */
-	public static boolean filterLinkAndDownloadAndSave(String link,String storageAddress) throws IOException{
+	public static String filterLinkAndDownloadAndSave(String link,String storageAddress) throws IOException{
 		
 
 		Connection request = Jsoup.connect(link).referrer(link)
@@ -94,8 +94,11 @@ public class HttpGetDownFile {
 		Matcher matcher2 = pat.matcher(fileName);
 		if(!matcher2.find()) fileName = fileName2;
 		String address = storageAddress + fileName;
-					
-		return downloadAndSaveFile(resultUrl,address);
+		if (downloadAndSaveFile(resultUrl,address))	{
+			return fileName;
+		}else {
+			return null;
+		}
 	}
 	
 	public static long getTimeLong(String time,String format){

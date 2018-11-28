@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 public class DruidNovleDealData {
+    /**
+     * 查询并处理小说主表
+     * @return
+     */
     public static List<DruidNovelResource> dealDruidNovel () {
         String sql = "select id,name,link_txt,has_loaddown,repository_path from druid_novel_resource limit 10";
         List<Map<String, Object>> list = dataDeal.getC3p0list(sql);

@@ -1,5 +1,6 @@
 package multithreading;
 
+import c3p0Test.dataDeal;
 import com.druid.dao.DruidNovelResourceMapper;
 import com.druid.entity.DruidNovelResource;
 import com.druid.service.DruidNovelResourceService;
@@ -130,17 +131,21 @@ public class MultithreadingService implements Runnable {
     }
 
     void startRun4 () {
-        System.out.println("开始下载："+this.novelResource.getName()+this.novelResource.getHasLoaddown());
        if (!this.novelResource.getHasLoaddown()) {
            String storeAdress = "D:\\" + this.novelResource.getRepositoryPath();
            System.out.println("开始下载："+this.novelResource.getName());
-           Boolean result = null;
-           try {
-               result = HttpGetDownFile.downloadAndSaveFile(this.novelResource.getLinkTxt(),storeAdress);
+           String result = null;
+           /*try {
+               result = HttpGetDownFile.filterLinkAndDownloadAndSave(this.novelResource.getLinkTxt(),storeAdress);
            } catch (IOException e) {
                e.printStackTrace();
+           }*/
+           result = "test";
+           if ( result != null ){
+               String getSuccessRepositoryPath = this.novelResource.getRepositoryPath()+result;
+               String sql = "UPDATE druid_novel_resource SET has_loaddown=1,repository_path='"+getSuccessRepositoryPath+"' where id = "+this.novelResource.getId()+"";
+               dataDeal.updateByc3p0(sql);
            }
-           System.out.println("结果是："+result);
        }
     }
 }

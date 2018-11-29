@@ -102,15 +102,27 @@ public class DruidNovelResource {
     private String crawlStartLink;
 
     /**
-     * 是否下载 0-否 1-是
+     * txt是否下载 0-否 1-是
      */
     @Column(name = "has_loaddown")
     private Boolean hasLoaddown;
 
     /**
-     * 下载存放路径
+     * txt下载存放路径
      */
     @Column(name = "repository_path")
     private String repositoryPath;
+
+    /**
+     * 图片是否下载 0-否 1-是
+     */
+    @Column(name = "src_has_loaddown")
+    private Boolean srcHasLoaddown;
+
+    /**
+     * 图片下载存放路径
+     */
+    @Column(name = "src_repository_path")
+    private String srcRepositoryPath;
 
 }

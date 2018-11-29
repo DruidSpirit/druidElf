@@ -153,7 +153,7 @@ public class NovelCrawlerControl {
 		String link = "https://dd.sjtxt.la/down/89/89327/????????????.txt";
 		//D:\\getPicFiles\\
 		String address = "C:\\Users\\Administrator\\Desktop\\testDwonload\\";
-		HttpGetDownFile.filterLinkAndDownloadAndSave(link, address);
+		HttpGetDownFile.filterLinkAndDownloadAndSave(link, address,false);
 	}
 
 	/**

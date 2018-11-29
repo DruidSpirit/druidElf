@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +21,10 @@ import org.jsoup.helper.StringUtil;
 import com.druid.enums.UrlAboutNovelEnums;
 
 public class HttpGetDownFile {
+	/**
+	 * 线程锁
+	 */
+	private static Lock lock = new ReentrantLock();
 	/**
 	 * 得到文件地址并下载文件(已经处理过的正常地址)
 	 * @param link
@@ -36,7 +42,8 @@ public class HttpGetDownFile {
 					.execute();
 			
 			System.out.println(request.url());
-			byte[] fileData = request.bodyAsBytes();						
+			byte[] fileData = request.bodyAsBytes();
+
 			FileUtils.writeByteArrayToFile(new File(storageAddress), fileData);
 			
 			return true;
@@ -54,8 +61,12 @@ public class HttpGetDownFile {
 	 * @param storageAddress 下载文件的储存地址(这里的文件名称不包括文件名)
 	 * @throws IOException
 	 */
-	public static String filterLinkAndDownloadAndSave(String link,String storageAddress) throws IOException{
-		
+	public static String filterLinkAndDownloadAndSave(String link,String storageAddress,boolean ismkdirsByFileName) throws IOException{
+		lock.lock(); // 这里给上锁防止多线程重复创建文件夹
+			if (!new File(storageAddress).isDirectory()) {
+				new File(storageAddress).mkdirs();
+			}
+		lock.unlock();
 
 		Connection request = Jsoup.connect(link).referrer(link)
 				.userAgent(UrlAboutNovelEnums.UserAgent7.getUrl())
@@ -93,7 +104,14 @@ public class HttpGetDownFile {
 		//String timeName = (new DateTime().toLocalDateTime().toString("yyyy年MM月dd日hh点mm分ss秒"))+ fileName;//根据当前时间合成的文件名		
 		Matcher matcher2 = pat.matcher(fileName);
 		if(!matcher2.find()) fileName = fileName2;
-		String address = storageAddress + fileName;
+		// 这里用文件名新建一个文件夹
+		String address = "";
+		if ( ismkdirsByFileName ) {
+			address = storageAddress+"\\"+fileName.split("\\.")[0] +"\\"+ fileName;
+		}else{
+			address = storageAddress + fileName;
+		}
+
 		if (downloadAndSaveFile(resultUrl,address))	{
 			return fileName;
 		}else {

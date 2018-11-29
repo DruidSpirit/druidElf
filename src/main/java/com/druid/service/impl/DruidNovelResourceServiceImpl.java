@@ -106,7 +106,7 @@ public class DruidNovelResourceServiceImpl extends BaseService<DruidNovelResourc
                     toDoList.add(href);
                     toDoListHref.add(href);
                     //?????????
-                    HttpGetDownFile.filterLinkAndDownloadAndSave(href,storeAddress);
+                    HttpGetDownFile.filterLinkAndDownloadAndSave(href,storeAddress,false);
                     System.out.println("????????????"+href);
 //					NovelResource novelResource = NovelResource.builder().build();
                     DruidNovelResource novelResource =  DruidNovelResource.builder().build();

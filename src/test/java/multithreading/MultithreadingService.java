@@ -16,7 +16,7 @@ public class MultithreadingService implements Runnable {
     private DruidNovelResource novelResource;
     private DruidNovelResourceMapper druidNovelResourceService;
     /**
-     * ä»£ç†å·¥å‚ç±»
+     * ´úÀí¹¤³§Àà
      */
     private SqlSessionFactory sqlSessionFactory;
     int i = 0;
@@ -85,7 +85,7 @@ public class MultithreadingService implements Runnable {
                         .hasLoaddown(false)
                         .build();
                 novelResource.setHasLoaddown(false);
-                // åœ¨springä¸­é…ç½®SqlSessionTemplateä¿è¯çº¿ç¨‹å®‰å…¨
+                // ÔÚspringÖĞÅäÖÃSqlSessionTemplate±£Ö¤Ïß³Ì°²È«
             try {
                 druidNovelResourceService.updateByPrimaryKeySelective(druidNovelResource2);
             }catch (Exception e){
@@ -102,7 +102,7 @@ public class MultithreadingService implements Runnable {
                     .hasLoaddown(false)
                     .build();
             novelResource.setHasLoaddown(false);
-            // åœ¨springä¸­é…ç½®SqlSessionTemplateä¿è¯çº¿ç¨‹å®‰å…¨
+            // ÔÚspringÖĞÅäÖÃSqlSessionTemplate±£Ö¤Ïß³Ì°²È«
             SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
             DruidNovelResourceMapper mapper = sqlSessionTemplate.getMapper(DruidNovelResourceMapper.class);
             try {
@@ -121,7 +121,7 @@ public class MultithreadingService implements Runnable {
             lock.lock();
             try {
                 Boolean result = HttpGetDownFile.downloadAndSaveFile(this.novelResource.getLinkTxt(),storeAdress);
-                System.out.println("ç»“æœæ˜¯ï¼š"+result);
+                System.out.println("½á¹ûÊÇ£º"+result);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,21 +131,51 @@ public class MultithreadingService implements Runnable {
     }
 
     void startRun4 () {
+
+        String root = "C:\\Users\\Administrator\\Desktop\\testNovel\\";
+        String result = null; // txtĞ¡ËµÏÂÔØ½á¹û
+        // text Ğ¡ËµÏÂÔØ
        if (!this.novelResource.getHasLoaddown()) {
-           String storeAdress = "D:\\" + this.novelResource.getRepositoryPath();
-           System.out.println("å¼€å§‹ä¸‹è½½ï¼š"+this.novelResource.getName());
-           String result = null;
-           /*try {
-               result = HttpGetDownFile.filterLinkAndDownloadAndSave(this.novelResource.getLinkTxt(),storeAdress);
+           String storeAdress = root + this.novelResource.getRepositoryPath();
+           System.out.println("¿ªÊ¼ÏÂÔØtext£º"+this.novelResource.getName());
+
+           // ¿ªÊ¼ÏÂÔØTXTÎÄ±¾Ğ¡Ëµ
+           try {
+               result = HttpGetDownFile.filterLinkAndDownloadAndSave(this.novelResource.getLinkTxt(),storeAdress,true);
            } catch (IOException e) {
+               result = null;
                e.printStackTrace();
-           }*/
-           result = "test";
+           }
+           // ÏÂÔØ³É¹¦ºóĞŞ¸ÄÊı¾İ¿â×´Ì¬
            if ( result != null ){
                String getSuccessRepositoryPath = this.novelResource.getRepositoryPath()+result;
                String sql = "UPDATE druid_novel_resource SET has_loaddown=1,repository_path='"+getSuccessRepositoryPath+"' where id = "+this.novelResource.getId()+"";
                dataDeal.updateByc3p0(sql);
            }
        }
+
+        // srcÍ¼Æ¬ÏÂÔØ
+        if (!this.novelResource.getSrcHasLoaddown()) {
+            String storeAdress2 = root + this.novelResource.getSrcRepositoryPath();
+            if ( result != null ) {
+                storeAdress2 +=  "\\"+result.split("\\.")[0] +"\\";
+            }
+            System.out.println("¿ªÊ¼ÏÂÔØÍ¼Æ¬£º"+this.novelResource.getName());
+            String result2 = null; // srcÍ¼Æ¬ÏÂÔØ½á¹û
+
+            // ¿ªÊ¼ÏÂÔØĞ¡Ëµ¶ÔÓ¦µÄÍ¼Æ¬
+            try {
+                result2 = HttpGetDownFile.filterLinkAndDownloadAndSave(this.novelResource.getLinkSrc(),storeAdress2,false);
+            } catch (IOException e) {
+                result2 = null;
+                e.printStackTrace();
+            }
+            // ÏÂÔØ³É¹¦ºóĞŞ¸ÄÊı¾İ¿â×´Ì¬
+            if ( result2 != null ){
+                String getSuccessRepositoryPath = this.novelResource.getSrcRepositoryPath()+result2;
+                String sql = "UPDATE druid_novel_resource SET src_has_loaddown=1,src_repository_path='"+getSuccessRepositoryPath+"' where id = "+this.novelResource.getId()+"";
+                dataDeal.updateByc3p0(sql);
+            }
+        }
     }
 }
